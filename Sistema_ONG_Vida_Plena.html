@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONG Vida Plena - Sistema de Gestão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --primary-light: #D1FAE5;
+            --secondary: #6366F1;
+            --accent: #F59E0B;
+            --dark: #0F172A;
+            --dark-soft: #1E293B;
+            --gray: #64748B;
+            --gray-light: #E2E8F0;
+            --white: #FFFFFF;
+            --danger: #EF4444;
+            --success: #22C55E;
+            --gradient-1: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%);
+            --gradient-2: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #F8FAFC;
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.08) 0%, transparent 40%);
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-light);
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-1);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            font-size: 0.7rem;
+            color: var(--gray);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--primary-light);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.disconnected {
+            background: var(--danger);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 16px 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: var(--white);
+            border: 2px solid transparent;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--gray);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab:hover {
+            background: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary-dark);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-tab .icon {
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .stat-card.events::before { background: var(--gradient-1); }
+        .stat-card.beneficiaries::before { background: var(--gradient-2); }
+        .stat-card.subscriptions::before { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+        .stat-card.attendance::before { background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .stat-card.events .stat-icon { background: var(--primary-light); }
+        .stat-card.beneficiaries .stat-icon { background: #EEF2FF; }
+        .stat-card.subscriptions .stat-icon { background: #FEF3C7; }
+        .stat-card.attendance .stat-icon { background: #FEE2E2; }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-family: 'Space Mono', monospace;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-card.events .stat-value { color: var(--primary); }
+        .stat-card.beneficiaries .stat-value { color: var(--secondary); }
+        .stat-card.subscriptions .stat-value { color: var(--accent); }
+        .stat-card.attendance .stat-value { color: var(--danger); }
+
+        .stat-label {
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Section */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-light);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-title .emoji {
+            font-size: 1.5rem;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 14px 16px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748B'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 44px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 28px;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--dark);
+            border: 2px solid var(--gray-light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-light);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #DC2626;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray);
+            background: #F8FAFC;
+            border-bottom: 2px solid var(--gray-light);
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 0.95rem;
+        }
+
+        .data-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: #F8FAFC;
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-success { background: #D1FAE5; color: #065F46; }
+        .badge-warning { background: #FEF3C7; color: #92400E; }
+        .badge-danger { background: #FEE2E2; color: #991B1B; }
+        .badge-info { background: #DBEAFE; color: #1E40AF; }
+        .badge-purple { background: #EDE9FE; color: #5B21B6; }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 90px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            background: var(--white);
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 320px;
+            max-width: 420px;
+            animation: slideIn 0.4s ease;
+            border-left: 4px solid;
+        }
+
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        .toast.info { border-color: var(--secondary); }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--gray);
+            padding: 4px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--dark);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--gray);
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--gray-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Config Panel */
+        .config-panel {
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            color: var(--white);
+        }
+
+        .config-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .config-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .config-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .config-label {
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                height: auto;
+                padding: 16px 0;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav-tabs {
+                overflow-x: auto;
+                padding: 12px 16px;
+                gap: 8px;
+            }
+
+            .nav-tab {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+
+            .main-content {
+                padding: 0 16px 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-value {
+                font-size: 1.8rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🌱</div>
+                <div>
+                    <div class="logo-text">Vida Plena</div>
+                    <div class="logo-subtitle">Sistema de Gestão</div>
+                </div>
+            </div>
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-dot disconnected" id="statusDot"></span>
+                <span id="statusText">Desconectado</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
+            <span class="icon">📊</span> Dashboard
+        </button>
+        <button class="nav-tab" data-tab="eventos" onclick="switchTab('eventos')">
+            <span class="icon">📅</span> Eventos
+        </button>
+        <button class="nav-tab" data-tab="beneficiarios" onclick="switchTab('beneficiarios')">
+            <span class="icon">👥</span> Beneficiários
+        </button>
+        <button class="nav-tab" data-tab="inscricoes" onclick="switchTab('inscricoes')">
+            <span class="icon">📋</span> Inscrições
+        </button>
+        <button class="nav-tab" data-tab="config" onclick="switchTab('config')">
+            <span class="icon">⚙️</span> Configuração
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="stats-grid">
+                <div class="stat-card events">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value" id="totalEventos">--</div>
+                    <div class="stat-label">Eventos Cadastrados</div>
+                </div>
+                <div class="stat-card beneficiaries">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="totalBeneficiarios">--</div>
+                    <div class="stat-label">Beneficiários Ativos</div>
+                </div>
+                <div class="stat-card subscriptions">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-value" id="totalInscricoes">--</div>
+                    <div class="stat-label">Inscrições Realizadas</div>
+                </div>
+                <div class="stat-card attendance">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-value" id="taxaPresenca">--%</div>
+                    <div class="stat-label">Taxa de Presença</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">📈</span> Próximos Eventos</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Evento</th>
+                                    <th>Tipo</th>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th>Vagas</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="proximosEventosTable">
+                                <tr>
+                                    <td colspan="6" class="empty-state">
+                                        <div class="spinner" style="margin: 0 auto;"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Eventos Section -->
+        <section id="eventos" class="section">
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">➕</span> Cadastrar Novo Evento</h2>
+                </div>
+                <div class="card-body">
+                    <form id="formEvento" onsubmit="salvarEvento(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Nome do Evento <span class="required">*</span></label>
+                                <input type="text" class="form-input" id="eventoNome" placeholder="Ex: Curso de Informática Básica" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tipo <span class="required">*</span></label>
+                                <select class="form-select" id="eventoTipo" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="inclusao_digital">💻 Inclusão Digital</option>
+                                    <option value="capacitacao_profissional">💼 Capacitação Profissional</option>
+                                    <option value="campanha_saude">🏥 Campanha de Saúde</option>
+                                    <option value="outro">📌 Outro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Data e Hora <span class="required">*</span></label>
+                                <input type="datetime-local" class="form-input" id="eventoData" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Vagas Disponíveis</label>
+                                <input type="number" class="form-input" id="eventoVagas" placeholder="50" min="1" value="50">
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Local</label>
+                                <input type="text" class="form-input" id="eventoLocal" placeholder="Ex: Centro Comunitário Vila Nova">
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Descrição</label>
+                                <textarea class="form-textarea" id="eventoDescricao" placeholder="Descreva o evento..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="btnSalvarEvento">
+                                <span>💾</span> Salvar Evento
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <span>🔄</span> Limpar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">📅</span> Eventos Cadastrados</h2>
+                    <button class="btn btn-secondary btn-sm" onclick="carregarEventos()">
+                        <span>🔄</span> Atualizar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Tipo</th>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th>Vagas</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="eventosTable">
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="empty-state">
+                                            <div class="icon">📅</div>
+                                            <h3>Nenhum evento cadastrado</h3>
+                                            <p>Configure a conexão e cadastre o primeiro evento.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Beneficiários Section -->
+        <section id="beneficiarios" class="section">
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">➕</span> Cadastrar Novo Beneficiário</h2>
+                </div>
+                <div class="card-body">
+                    <form id="formBeneficiario" onsubmit="salvarBeneficiario(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Nome Completo <span class="required">*</span></label>
+                                <input type="text" class="form-input" id="benefNome" placeholder="Ex: Maria Silva Santos" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Idade</label>
+                                <input type="number" class="form-input" id="benefIdade" placeholder="Ex: 35" min="0" max="120">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telefone</label>
+                                <input type="tel" class="form-input" id="benefTelefone" placeholder="(11) 99999-9999">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">E-mail</label>
+                                <input type="email" class="form-input" id="benefEmail" placeholder="email@exemplo.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Região <span class="required">*</span></label>
+                                <select class="form-select" id="benefRegiao" required>
+                                    <option value="">Selecione a região...</option>
+                                    <option value="Guarulhos">Guarulhos</option>
+                                    <option value="Osasco">Osasco</option>
+                                    <option value="Santo André">Santo André</option>
+                                    <option value="São Bernardo">São Bernardo do Campo</option>
+                                    <option value="Diadema">Diadema</option>
+                                    <option value="Mauá">Mauá</option>
+                                    <option value="Itaquera">Itaquera</option>
+                                    <option value="Zona Leste">Zona Leste - SP</option>
+                                    <option value="Zona Sul">Zona Sul - SP</option>
+                                    <option value="Zona Norte">Zona Norte - SP</option>
+                                    <option value="Outra">Outra</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-textarea" id="benefObs" placeholder="Informações adicionais..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="btnSalvarBenef">
+                                <span>💾</span> Salvar Beneficiário
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <span>🔄</span> Limpar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">👥</span> Beneficiários Cadastrados</h2>
+                    <button class="btn btn-secondary btn-sm" onclick="carregarBeneficiarios()">
+                        <span>🔄</span> Atualizar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Idade</th>
+                                    <th>Telefone</th>
+                                    <th>E-mail</th>
+                                    <th>Região</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="beneficiariosTable">
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <div class="icon">👥</div>
+                                            <h3>Nenhum beneficiário cadastrado</h3>
+                                            <p>Configure a conexão e cadastre o primeiro beneficiário.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inscrições Section -->
+        <section id="inscricoes" class="section">
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">➕</span> Nova Inscrição</h2>
+                </div>
+                <div class="card-body">
+                    <form id="formInscricao" onsubmit="salvarInscricao(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Beneficiário <span class="required">*</span></label>
+                                <select class="form-select" id="inscBeneficiario" required>
+                                    <option value="">Selecione o beneficiário...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Evento <span class="required">*</span></label>
+                                <select class="form-select" id="inscEvento" required>
+                                    <option value="">Selecione o evento...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="inscStatus">
+                                    <option value="inscrito">📝 Inscrito</option>
+                                    <option value="confirmado">✅ Confirmado</option>
+                                    <option value="lista_espera">⏳ Lista de Espera</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="btnSalvarInsc">
+                                <span>💾</span> Realizar Inscrição
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">📋</span> Inscrições Realizadas</h2>
+                    <button class="btn btn-secondary btn-sm" onclick="carregarInscricoes()">
+                        <span>🔄</span> Atualizar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Beneficiário</th>
+                                    <th>Evento</th>
+                                    <th>Data Inscrição</th>
+                                    <th>Status</th>
+                                    <th>Presença</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inscricoesTable">
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <div class="icon">📋</div>
+                                            <h3>Nenhuma inscrição realizada</h3>
+                                            <p>Configure a conexão e realize a primeira inscrição.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Config Section -->
+        <section id="config" class="section">
+            <div class="config-panel">
+                <h3 class="config-title">🔐 Configuração do Supabase</h3>
+                <p style="margin-bottom: 20px; opacity: 0.8; font-size: 0.95rem;">
+                    Insira as credenciais do seu projeto Supabase. Você encontra essas informações em: 
+                    <strong>Settings → API</strong>
+                </p>
+                <div class="config-grid">
+                    <div>
+                        <div class="config-label">URL do Projeto</div>
+                        <input type="text" class="config-input" id="supabaseUrl" placeholder="https://xxxxx.supabase.co">
+                    </div>
+                    <div>
+                        <div class="config-label">Anon Key (Chave Pública)</div>
+                        <input type="text" class="config-input" id="supabaseKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="conectarSupabase()">
+                        <span>🔗</span> Conectar ao Supabase
+                    </button>
+                    <button class="btn btn-secondary" onclick="testarConexao()" style="margin-left: 12px;">
+                        <span>🧪</span> Testar Conexão
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">📖</span> Instruções de Configuração</h2>
+                </div>
+                <div class="card-body">
+                    <div style="line-height: 1.8;">
+                        <p><strong>1.</strong> Acesse seu projeto no <a href="https://supabase.com/dashboard" target="_blank" style="color: var(--primary);">Supabase Dashboard</a></p>
+                        <p><strong>2.</strong> Vá em <strong>Settings</strong> (ícone de engrenagem) → <strong>API</strong></p>
+                        <p><strong>3.</strong> Copie a <strong>URL</strong> do projeto (Project URL)</p>
+                        <p><strong>4.</strong> Copie a <strong>anon public</strong> key (não a secret!)</p>
+                        <p><strong>5.</strong> Cole os valores acima e clique em <strong>Conectar</strong></p>
+                        <br>
+                        <p style="color: var(--gray);">
+                            <strong>💡 Dica:</strong> As credenciais são salvas no localStorage do navegador para sua conveniência.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal-overlay" id="modalConfirm">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Confirmar Ação</h3>
+                <button class="modal-close" onclick="fecharModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">Tem certeza que deseja realizar esta ação?</p>
+                <div class="form-actions" style="justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+                    <button class="btn btn-danger" id="modalConfirmBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // VARIÁVEIS GLOBAIS
+        // ============================================
+        let supabase = null;
+        let eventos = [];
+        let beneficiarios = [];
+        let inscricoes = [];
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Carregar credenciais salvas
+            const savedUrl = localStorage.getItem('supabaseUrl');
+            const savedKey = localStorage.getItem('supabaseKey');
+            
+            if (savedUrl && savedKey) {
+                document.getElementById('supabaseUrl').value = savedUrl;
+                document.getElementById('supabaseKey').value = savedKey;
+                conectarSupabase(true);
+            }
+        });
+
+        // ============================================
+        // CONEXÃO COM SUPABASE
+        // ============================================
+        async function conectarSupabase(silent = false) {
+            const url = document.getElementById('supabaseUrl').value.trim();
+            const key = document.getElementById('supabaseKey').value.trim();
+
+            if (!url || !key) {
+                if (!silent) showToast('error', 'Erro', 'Preencha a URL e a Key do Supabase');
+                return;
+            }
+
+            try {
+                supabase = window.supabase.createClient(url, key);
+                
+                // Testar conexão
+                const { data, error } = await supabase.from('eventos').select('count', { count: 'exact', head: true });
+                
+                if (error) throw error;
+
+                // Salvar credenciais
+                localStorage.setItem('supabaseUrl', url);
+                localStorage.setItem('supabaseKey', key);
+
+                // Atualizar status
+                atualizarStatusConexao(true);
+                
+                if (!silent) showToast('success', 'Conectado!', 'Conexão estabelecida com sucesso');
+
+                // Carregar dados
+                await carregarTodosDados();
+
+            } catch (error) {
+                console.error('Erro na conexão:', error);
+                atualizarStatusConexao(false);
+                if (!silent) showToast('error', 'Erro de Conexão', error.message || 'Verifique as credenciais');
+            }
+        }
+
+        async function testarConexao() {
+            if (!supabase) {
+                showToast('error', 'Erro', 'Configure a conexão primeiro');
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase.from('eventos').select('count', { count: 'exact', head: true });
+                if (error) throw error;
+                showToast('success', 'Sucesso!', 'Conexão funcionando corretamente');
+            } catch (error) {
+                showToast('error', 'Falha no Teste', error.message);
+            }
+        }
+
+        function atualizarStatusConexao(conectado) {
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+            
+            if (conectado) {
+                dot.classList.remove('disconnected');
+                text.textContent = 'Conectado';
+            } else {
+                dot.classList.add('disconnected');
+                text.textContent = 'Desconectado';
+            }
+        }
+
+        // ============================================
+        // CARREGAR DADOS
+        // ============================================
+        async function carregarTodosDados() {
+            await Promise.all([
+                carregarEventos(),
+                carregarBeneficiarios(),
+                carregarInscricoes(),
+                carregarEstatisticas()
+            ]);
+        }
+
+        async function carregarEstatisticas() {
+            if (!supabase) return;
+
+            try {
+                // Total de eventos
+                const { count: totalEventos } = await supabase
+                    .from('eventos')
+                    .select('*', { count: 'exact', head: true });
+                
+                document.getElementById('totalEventos').textContent = totalEventos || 0;
+
+                // Total de beneficiários
+                const { count: totalBenef } = await supabase
+                    .from('beneficiarios')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('ativo', true);
+                
+                document.getElementById('totalBeneficiarios').textContent = totalBenef || 0;
+
+                // Total de inscrições
+                const { count: totalInsc } = await supabase
+                    .from('inscricoes')
+                    .select('*', { count: 'exact', head: true });
+                
+                document.getElementById('totalInscricoes').textContent = totalInsc || 0;
+
+                // Taxa de presença
+                const { data: presencaData } = await supabase
+                    .from('inscricoes')
+                    .select('presenca');
+                
+                if (presencaData && presencaData.length > 0) {
+                    const presentes = presencaData.filter(i => i.presenca).length;
+                    const taxa = Math.round((presentes / presencaData.length) * 100);
+                    document.getElementById('taxaPresenca').textContent = taxa + '%';
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+            }
+        }
+
+        async function carregarEventos() {
+            if (!supabase) return;
+
+            try {
+                const { data, error } = await supabase
+                    .from('eventos')
+                    .select('*')
+                    .order('data_evento', { ascending: true });
+
+                if (error) throw error;
+
+                eventos = data || [];
+                renderizarEventos();
+                renderizarProximosEventos();
+                atualizarSelectEventos();
+
+            } catch (error) {
+                console.error('Erro ao carregar eventos:', error);
+                showToast('error', 'Erro', 'Não foi possível carregar os eventos');
+            }
+        }
+
+        async function carregarBeneficiarios() {
+            if (!supabase) return;
+
+            try {
+                const { data, error } = await supabase
+                    .from('beneficiarios')
+                    .select('*')
+                    .eq('ativo', true)
+                    .order('nome', { ascending: true });
+
+                if (error) throw error;
+
+                beneficiarios = data || [];
+                renderizarBeneficiarios();
+                atualizarSelectBeneficiarios();
+
+            } catch (error) {
+                console.error('Erro ao carregar beneficiários:', error);
+                showToast('error', 'Erro', 'Não foi possível carregar os beneficiários');
+            }
+        }
+
+        async function carregarInscricoes() {
+            if (!supabase) return;
+
+            try {
+                const { data, error } = await supabase
+                    .from('inscricoes')
+                    .select(`
+                        *,
+                        beneficiarios (nome),
+                        eventos (nome)
+                    `)
+                    .order('data_inscricao', { ascending: false });
+
+                if (error) throw error;
+
+                inscricoes = data || [];
+                renderizarInscricoes();
+
+            } catch (error) {
+                console.error('Erro ao carregar inscrições:', error);
+                showToast('error', 'Erro', 'Não foi possível carregar as inscrições');
+            }
+        }
+
+        // ============================================
+        // RENDERIZAÇÃO
+        // ============================================
+        function renderizarEventos() {
+            const tbody = document.getElementById('eventosTable');
+            
+            if (eventos.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <div class="icon">📅</div>
+                                <h3>Nenhum evento cadastrado</h3>
+                                <p>Cadastre o primeiro evento usando o formulário acima.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = eventos.map(e => `
+                <tr>
+                    <td><strong>${e.nome}</strong></td>
+                    <td>${getBadgeTipo(e.tipo_evento)}</td>
+                    <td>${formatarData(e.data_evento)}</td>
+                    <td>${e.local || '-'}</td>
+                    <td>${e.vagas_disponiveis || e.vagas}/${e.vagas}</td>
+                    <td>${getBadgeStatus(e.status)}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="excluirEvento('${e.id}')">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderizarProximosEventos() {
+            const tbody = document.getElementById('proximosEventosTable');
+            const hoje = new Date();
+            const proximos = eventos
+                .filter(e => new Date(e.data_evento) >= hoje && e.status === 'ativo')
+                .slice(0, 5);
+
+            if (proximos.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--gray);">
+                            Nenhum evento próximo encontrado
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = proximos.map(e => `
+                <tr>
+                    <td><strong>${e.nome}</strong></td>
+                    <td>${getBadgeTipo(e.tipo_evento)}</td>
+                    <td>${formatarData(e.data_evento)}</td>
+                    <td>${e.local || '-'}</td>
+                    <td>${e.vagas_disponiveis || e.vagas}/${e.vagas}</td>
+                    <td>${getBadgeStatus(e.status)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderizarBeneficiarios() {
+            const tbody = document.getElementById('beneficiariosTable');
+            
+            if (beneficiarios.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <div class="icon">👥</div>
+                                <h3>Nenhum beneficiário cadastrado</h3>
+                                <p>Cadastre o primeiro beneficiário usando o formulário acima.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = beneficiarios.map(b => `
+                <tr>
+                    <td><strong>${b.nome}</strong></td>
+                    <td>${b.idade || '-'}</td>
+                    <td>${b.telefone || '-'}</td>
+                    <td>${b.email || '-'}</td>
+                    <td><span class="badge badge-info">${b.regiao}</span></td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="excluirBeneficiario('${b.id}')">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderizarInscricoes() {
+            const tbody = document.getElementById('inscricoesTable');
+            
+            if (inscricoes.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <div class="icon">📋</div>
+                                <h3>Nenhuma inscrição realizada</h3>
+                                <p>Realize a primeira inscrição usando o formulário acima.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = inscricoes.map(i => `
+                <tr>
+                    <td><strong>${i.beneficiarios?.nome || 'N/A'}</strong></td>
+                    <td>${i.eventos?.nome || 'N/A'}</td>
+                    <td>${formatarData(i.data_inscricao)}</td>
+                    <td>${getBadgeStatusInscricao(i.status)}</td>
+                    <td>
+                        <button class="btn btn-sm ${i.presenca ? 'btn-primary' : 'btn-secondary'}" 
+                                onclick="togglePresenca('${i.id}', ${!i.presenca})">
+                            ${i.presenca ? '✅ Presente' : '⬜ Ausente'}
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="excluirInscricao('${i.id}')">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function atualizarSelectEventos() {
+            const select = document.getElementById('inscEvento');
+            const eventosAtivos = eventos.filter(e => e.status === 'ativo');
+            
+            select.innerHTML = '<option value="">Selecione o evento...</option>' +
+                eventosAtivos.map(e => `
+                    <option value="${e.id}">${e.nome} - ${formatarData(e.data_evento)}</option>
+                `).join('');
+        }
+
+        function atualizarSelectBeneficiarios() {
+            const select = document.getElementById('inscBeneficiario');
+            
+            select.innerHTML = '<option value="">Selecione o beneficiário...</option>' +
+                beneficiarios.map(b => `
+                    <option value="${b.id}">${b.nome}</option>
+                `).join('');
+        }
+
+        // ============================================
+        // SALVAR DADOS
+        // ============================================
+        async function salvarEvento(event) {
+            event.preventDefault();
+            
+            if (!supabase) {
+                showToast('error', 'Erro', 'Configure a conexão com o Supabase primeiro');
+                return;
+            }
+
+            const btn = document.getElementById('btnSalvarEvento');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Salvando...';
+
+            try {
+                const novoEvento = {
+                    nome: document.getElementById('eventoNome').value,
+                    tipo_evento: document.getElementById('eventoTipo').value,
+                    data_evento: document.getElementById('eventoData').value,
+                    local: document.getElementById('eventoLocal').value || null,
+                    vagas: parseInt(document.getElementById('eventoVagas').value) || 50,
+                    vagas_disponiveis: parseInt(document.getElementById('eventoVagas').value) || 50,
+                    descricao: document.getElementById('eventoDescricao').value || null,
+                    status: 'ativo'
+                };
+
+                const { data, error } = await supabase
+                    .from('eventos')
+                    .insert([novoEvento])
+                    .select();
+
+                if (error) throw error;
+
+                showToast('success', 'Sucesso!', 'Evento cadastrado com sucesso');
+                document.getElementById('formEvento').reset();
+                await carregarEventos();
+                await carregarEstatisticas();
+
+            } catch (error) {
+                console.error('Erro ao salvar evento:', error);
+                showToast('error', 'Erro', error.message || 'Não foi possível salvar o evento');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>💾</span> Salvar Evento';
+            }
+        }
+
+        async function salvarBeneficiario(event) {
+            event.preventDefault();
+            
+            if (!supabase) {
+                showToast('error', 'Erro', 'Configure a conexão com o Supabase primeiro');
+                return;
+            }
+
+            const btn = document.getElementById('btnSalvarBenef');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Salvando...';
+
+            try {
+                const novoBeneficiario = {
+                    nome: document.getElementById('benefNome').value,
+                    idade: parseInt(document.getElementById('benefIdade').value) || null,
+                    telefone: document.getElementById('benefTelefone').value || null,
+                    email: document.getElementById('benefEmail').value || null,
+                    regiao: document.getElementById('benefRegiao').value,
+                    observacoes: document.getElementById('benefObs').value || null,
+                    ativo: true
+                };
+
+                const { data, error } = await supabase
+                    .from('beneficiarios')
+                    .insert([novoBeneficiario])
+                    .select();
+
+                if (error) throw error;
+
+                showToast('success', 'Sucesso!', 'Beneficiário cadastrado com sucesso');
+                document.getElementById('formBeneficiario').reset();
+                await carregarBeneficiarios();
+                await carregarEstatisticas();
+
+            } catch (error) {
+                console.error('Erro ao salvar beneficiário:', error);
+                showToast('error', 'Erro', error.message || 'Não foi possível salvar o beneficiário');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>💾</span> Salvar Beneficiário';
+            }
+        }
+
+        async function salvarInscricao(event) {
+            event.preventDefault();
+            
+            if (!supabase) {
+                showToast('error', 'Erro', 'Configure a conexão com o Supabase primeiro');
+                return;
+            }
+
+            const btn = document.getElementById('btnSalvarInsc');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Salvando...';
+
+            try {
+                const novaInscricao = {
+                    beneficiario_id: document.getElementById('inscBeneficiario').value,
+                    evento_id: document.getElementById('inscEvento').value,
+                    status: document.getElementById('inscStatus').value,
+                    presenca: false
+                };
+
+                const { data, error } = await supabase
+                    .from('inscricoes')
+                    .insert([novaInscricao])
+                    .select();
+
+                if (error) {
+                    if (error.code === '23505') {
+                        throw new Error('Este beneficiário já está inscrito neste evento');
+                    }
+                    throw error;
+                }
+
+                showToast('success', 'Sucesso!', 'Inscrição realizada com sucesso');
+                document.getElementById('formInscricao').reset();
+                await carregarInscricoes();
+                await carregarEventos();
+                await carregarEstatisticas();
+
+            } catch (error) {
+                console.error('Erro ao salvar inscrição:', error);
+                showToast('error', 'Erro', error.message || 'Não foi possível realizar a inscrição');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>💾</span> Realizar Inscrição';
+            }
+        }
+
+        // ============================================
+        // AÇÕES
+        // ============================================
+        async function togglePresenca(id, novoValor) {
+            if (!supabase) return;
+
+            try {
+                const { error } = await supabase
+                    .from('inscricoes')
+                    .update({ presenca: novoValor })
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                await carregarInscricoes();
+                await carregarEstatisticas();
+                showToast('success', 'Atualizado!', `Presença ${novoValor ? 'confirmada' : 'removida'}`);
+
+            } catch (error) {
+                showToast('error', 'Erro', 'Não foi possível atualizar a presença');
+            }
+        }
+
+        async function excluirEvento(id) {
+            if (!confirm('Tem certeza que deseja excluir este evento? Todas as inscrições serão removidas.')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('eventos')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                showToast('success', 'Excluído!', 'Evento removido com sucesso');
+                await carregarTodosDados();
+
+            } catch (error) {
+                showToast('error', 'Erro', 'Não foi possível excluir o evento');
+            }
+        }
+
+        async function excluirBeneficiario(id) {
+            if (!confirm('Tem certeza que deseja excluir este beneficiário?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('beneficiarios')
+                    .update({ ativo: false })
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                showToast('success', 'Excluído!', 'Beneficiário removido com sucesso');
+                await carregarTodosDados();
+
+            } catch (error) {
+                showToast('error', 'Erro', 'Não foi possível excluir o beneficiário');
+            }
+        }
+
+        async function excluirInscricao(id) {
+            if (!confirm('Tem certeza que deseja cancelar esta inscrição?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('inscricoes')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                showToast('success', 'Cancelada!', 'Inscrição removida com sucesso');
+                await carregarTodosDados();
+
+            } catch (error) {
+                showToast('error', 'Erro', 'Não foi possível cancelar a inscrição');
+            }
+        }
+
+        // ============================================
+        // UTILITÁRIOS
+        // ============================================
+        function switchTab(tabId) {
+            // Remover active de todas as tabs
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // Adicionar active na tab clicada
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function formatarData(dataStr) {
+            if (!dataStr) return '-';
+            const data = new Date(dataStr);
+            return data.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function getBadgeTipo(tipo) {
+            const tipos = {
+                'inclusao_digital': '<span class="badge badge-info">💻 Inclusão Digital</span>',
+                'capacitacao_profissional': '<span class="badge badge-purple">💼 Capacitação</span>',
+                'campanha_saude': '<span class="badge badge-success">🏥 Saúde</span>',
+                'outro': '<span class="badge badge-warning">📌 Outro</span>'
+            };
+            return tipos[tipo] || '<span class="badge">' + tipo + '</span>';
+        }
+
+        function getBadgeStatus(status) {
+            const statuses = {
+                'ativo': '<span class="badge badge-success">✅ Ativo</span>',
+                'cancelado': '<span class="badge badge-danger">❌ Cancelado</span>',
+                'concluido': '<span class="badge badge-info">✔️ Concluído</span>',
+                'lotado': '<span class="badge badge-warning">🔒 Lotado</span>'
+            };
+            return statuses[status] || '<span class="badge">' + status + '</span>';
+        }
+
+        function getBadgeStatusInscricao(status) {
+            const statuses = {
+                'inscrito': '<span class="badge badge-info">📝 Inscrito</span>',
+                'confirmado': '<span class="badge badge-success">✅ Confirmado</span>',
+                'cancelado': '<span class="badge badge-danger">❌ Cancelado</span>',
+                'lista_espera': '<span class="badge badge-warning">⏳ Lista Espera</span>'
+            };
+            return statuses[status] || '<span class="badge">' + status + '</span>';
+        }
+
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const icons = {
+                success: '✅',
+                error: '❌',
+                info: 'ℹ️'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type]}</span>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto-remove após 5 segundos
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.style.animation = 'slideIn 0.4s ease reverse';
+                    setTimeout(() => toast.remove(), 400);
+                }
+            }, 5000);
+        }
+
+        function fecharModal() {
+            document.getElementById('modalConfirm').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
