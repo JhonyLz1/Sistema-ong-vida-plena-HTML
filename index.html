@@ -4,277 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ONG Vida Plena - Sistema de Gestão</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <style>
-        :root {
-            --primary: #10B981;
-            --primary-dark: #059669;
-            --primary-light: #D1FAE5;
-            --secondary: #6366F1;
-            --accent: #F59E0B;
-            --dark: #0F172A;
-            --dark-soft: #1E293B;
-            --gray: #64748B;
-            --gray-light: #E2E8F0;
-            --white: #FFFFFF;
-            --danger: #EF4444;
-            --success: #22C55E;
-            --gradient-1: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%);
-            --gradient-2: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
-            --radius: 12px;
-            --radius-lg: 20px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #F8FAFC;
-            color: var(--dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f0f2f5;
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Animated Background */
-        .bg-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.08) 0%, transparent 40%);
         }
 
         /* Header */
         .header {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-light);
-            padding: 0 24px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 70px;
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
         }
 
-        .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--gradient-1);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: var(--shadow);
-        }
-
-        .logo-text {
-            font-weight: 800;
-            font-size: 1.4rem;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo-subtitle {
-            font-size: 0.7rem;
-            color: var(--gray);
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .connection-status {
-            display: flex;
+        .status-badge {
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
-            background: var(--primary-light);
-            border-radius: 100px;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-top: 10px;
             font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--primary-dark);
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: var(--success);
+            background: #ef4444;
+        }
+
+        .status-dot.connected {
+            background: #22c55e;
             animation: pulse 2s infinite;
         }
 
-        .status-dot.disconnected {
-            background: var(--danger);
-            animation: none;
-        }
-
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        /* Navigation Tabs */
-        .nav-tabs {
+        /* Navigation */
+        .nav {
+            background: white;
+            padding: 0 20px;
             display: flex;
-            gap: 4px;
-            padding: 16px 24px;
-            max-width: 1400px;
-            margin: 0 auto;
+            gap: 5px;
+            overflow-x: auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .nav-tab {
-            padding: 12px 24px;
-            background: var(--white);
-            border: 2px solid transparent;
-            border-radius: var(--radius);
+        .nav-btn {
+            padding: 15px 25px;
+            border: none;
+            background: transparent;
             cursor: pointer;
+            font-size: 1rem;
             font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--gray);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
         }
 
-        .nav-tab:hover {
-            background: var(--gray-light);
-            color: var(--dark);
+        .nav-btn:hover {
+            color: #10B981;
+            background: #f0fdf4;
         }
 
-        .nav-tab.active {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary-dark);
-            box-shadow: var(--shadow);
-        }
-
-        .nav-tab .icon {
-            font-size: 1.2rem;
+        .nav-btn.active {
+            color: #10B981;
+            border-bottom-color: #10B981;
+            background: #f0fdf4;
         }
 
         /* Main Content */
-        .main-content {
-            max-width: 1400px;
+        .main {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 24px 40px;
-            position: relative;
-            z-index: 1;
+            padding: 20px;
         }
 
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-light);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-        }
-
-        .stat-card.events::before { background: var(--gradient-1); }
-        .stat-card.beneficiaries::before { background: var(--gradient-2); }
-        .stat-card.subscriptions::before { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
-        .stat-card.attendance::before { background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 16px;
-        }
-
-        .stat-card.events .stat-icon { background: var(--primary-light); }
-        .stat-card.beneficiaries .stat-icon { background: #EEF2FF; }
-        .stat-card.subscriptions .stat-icon { background: #FEF3C7; }
-        .stat-card.attendance .stat-icon { background: #FEE2E2; }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            font-family: 'Space Mono', monospace;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-card.events .stat-value { color: var(--primary); }
-        .stat-card.beneficiaries .stat-value { color: var(--secondary); }
-        .stat-card.subscriptions .stat-value { color: var(--accent); }
-        .stat-card.attendance .stat-value { color: var(--danger); }
-
-        .stat-label {
-            color: var(--gray);
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        /* Section */
-        .section {
+        /* Pages */
+        .page {
             display: none;
         }
 
-        .section.active {
+        .page.active {
             display: block;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
@@ -282,154 +117,151 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Card */
+        /* Cards */
         .card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-light);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
             overflow: hidden;
         }
 
         .card-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--gray-light);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
+            padding: 18px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 1.1rem;
             font-weight: 700;
+            color: #1f2937;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
-        }
-
-        .card-title .emoji {
-            font-size: 1.5rem;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .card-body {
-            padding: 24px;
+            padding: 20px;
         }
 
-        /* Form Styles */
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid;
+        }
+
+        .stat-card.green { border-color: #10B981; }
+        .stat-card.blue { border-color: #6366f1; }
+        .stat-card.yellow { border-color: #f59e0b; }
+        .stat-card.red { border-color: #ef4444; }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1f2937;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Form */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
-        .form-group.full-width {
+        .form-group.full {
             grid-column: 1 / -1;
         }
 
         .form-label {
             font-weight: 600;
             font-size: 0.9rem;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            color: #374151;
         }
 
-        .form-label .required {
-            color: var(--danger);
+        .form-label .req {
+            color: #ef4444;
         }
 
         .form-input, .form-select, .form-textarea {
-            padding: 14px 16px;
-            border: 2px solid var(--gray-light);
-            border-radius: var(--radius);
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
             font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.2s ease;
-            background: var(--white);
+            transition: border-color 0.2s;
         }
 
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: var(--gray);
+            border-color: #10B981;
         }
 
         .form-textarea {
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
-        }
-
-        .form-select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748B'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 44px;
         }
 
         /* Buttons */
         .btn {
-            padding: 14px 28px;
-            border-radius: var(--radius);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            border: none;
-            font-family: inherit;
         }
 
         .btn-primary {
-            background: var(--gradient-1);
-            color: var(--white);
-            box-shadow: var(--shadow);
+            background: #10B981;
+            color: white;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
+            background: #059669;
         }
 
         .btn-secondary {
-            background: var(--white);
-            color: var(--dark);
-            border: 2px solid var(--gray-light);
+            background: #e5e7eb;
+            color: #374151;
         }
 
         .btn-secondary:hover {
-            background: var(--gray-light);
+            background: #d1d5db;
         }
 
         .btn-danger {
-            background: var(--danger);
-            color: var(--white);
+            background: #ef4444;
+            color: white;
+            padding: 8px 12px;
+            font-size: 0.85rem;
         }
 
         .btn-danger:hover {
-            background: #DC2626;
+            background: #dc2626;
         }
 
         .btn-sm {
@@ -437,267 +269,93 @@
             font-size: 0.85rem;
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
         .form-actions {
             display: flex;
-            gap: 12px;
-            margin-top: 24px;
+            gap: 10px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
 
         /* Table */
-        .table-container {
+        .table-wrap {
             overflow-x: auto;
         }
 
-        .data-table {
+        table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .data-table th {
-            padding: 14px 16px;
+        th {
+            padding: 12px 15px;
             text-align: left;
+            background: #f9fafb;
             font-weight: 700;
             font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--gray);
-            background: #F8FAFC;
-            border-bottom: 2px solid var(--gray-light);
-            white-space: nowrap;
+            color: #6b7280;
+            border-bottom: 2px solid #e5e7eb;
         }
 
-        .data-table td {
-            padding: 16px;
-            border-bottom: 1px solid var(--gray-light);
-            font-size: 0.95rem;
+        td {
+            padding: 14px 15px;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .data-table tbody tr {
-            transition: background 0.2s ease;
-        }
-
-        .data-table tbody tr:hover {
-            background: #F8FAFC;
-        }
-
-        .data-table tbody tr:last-child td {
-            border-bottom: none;
+        tr:hover {
+            background: #f9fafb;
         }
 
         /* Badges */
         .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 100px;
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
-            white-space: nowrap;
         }
 
-        .badge-success { background: #D1FAE5; color: #065F46; }
-        .badge-warning { background: #FEF3C7; color: #92400E; }
-        .badge-danger { background: #FEE2E2; color: #991B1B; }
-        .badge-info { background: #DBEAFE; color: #1E40AF; }
-        .badge-purple { background: #EDE9FE; color: #5B21B6; }
-
-        /* Toast Notifications */
-        .toast-container {
-            position: fixed;
-            top: 90px;
-            right: 24px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .toast {
-            background: var(--white);
-            padding: 16px 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-xl);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 320px;
-            max-width: 420px;
-            animation: slideIn 0.4s ease;
-            border-left: 4px solid;
-        }
-
-        .toast.success { border-color: var(--success); }
-        .toast.error { border-color: var(--danger); }
-        .toast.info { border-color: var(--secondary); }
-
-        .toast-icon {
-            font-size: 1.5rem;
-        }
-
-        .toast-content {
-            flex: 1;
-        }
-
-        .toast-title {
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .toast-message {
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-
-        .toast-close {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--gray);
-            padding: 4px;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-xl);
-        }
-
-        .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--gray-light);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--gray);
-            padding: 4px;
-            transition: color 0.2s;
-        }
-
-        .modal-close:hover {
-            color: var(--dark);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 24px;
-            color: var(--gray);
-        }
-
-        .empty-state .icon {
-            font-size: 4rem;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            font-size: 1.25rem;
-            color: var(--dark);
-            margin-bottom: 8px;
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid var(--gray-light);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-purple { background: #ede9fe; color: #5b21b6; }
 
         /* Config Panel */
-        .config-panel {
-            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 24px;
-            color: var(--white);
+        .config-box {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 20px;
         }
 
-        .config-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .config-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
         }
 
         .config-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .config-label {
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            opacity: 0.8;
         }
 
         .config-input {
+            width: 100%;
+            padding: 12px;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
-            color: var(--white);
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            font-family: 'Space Mono', monospace;
+            border-radius: 8px;
+            color: white;
             font-size: 0.9rem;
-            width: 100%;
         }
 
         .config-input::placeholder {
@@ -706,184 +364,162 @@
 
         .config-input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #10B981;
         }
 
-        .config-label {
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            opacity: 0.8;
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .toast.success { border-color: #10B981; }
+        .toast.error { border-color: #ef4444; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #9ca3af;
+            margin-left: auto;
+        }
+
+        /* Empty State */
+        .empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: #6b7280;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header-content {
-                height: auto;
-                padding: 16px 0;
-                flex-direction: column;
-                gap: 12px;
+            .nav {
+                padding: 0 10px;
             }
-
-            .nav-tabs {
-                overflow-x: auto;
-                padding: 12px 16px;
-                gap: 8px;
+            .nav-btn {
+                padding: 12px 15px;
+                font-size: 0.9rem;
             }
-
-            .nav-tab {
-                padding: 10px 16px;
-                font-size: 0.85rem;
-                white-space: nowrap;
+            .main {
+                padding: 15px;
             }
-
-            .main-content {
-                padding: 0 16px 24px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .stat-card {
-                padding: 16px;
-            }
-
-            .stat-value {
-                font-size: 1.8rem;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .card-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
             .form-actions {
                 flex-direction: column;
             }
-
             .btn {
                 width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="bg-pattern"></div>
 
     <!-- Header -->
     <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">🌱</div>
-                <div>
-                    <div class="logo-text">Vida Plena</div>
-                    <div class="logo-subtitle">Sistema de Gestão</div>
-                </div>
-            </div>
-            <div class="connection-status" id="connectionStatus">
-                <span class="status-dot disconnected" id="statusDot"></span>
-                <span id="statusText">Desconectado</span>
-            </div>
+        <h1>🌱 ONG Vida Plena</h1>
+        <p>Sistema de Gestão de Eventos e Beneficiários</p>
+        <div class="status-badge">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Desconectado</span>
         </div>
     </header>
 
     <!-- Navigation -->
-    <nav class="nav-tabs">
-        <button class="nav-tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
-            <span class="icon">📊</span> Dashboard
-        </button>
-        <button class="nav-tab" data-tab="eventos" onclick="switchTab('eventos')">
-            <span class="icon">📅</span> Eventos
-        </button>
-        <button class="nav-tab" data-tab="beneficiarios" onclick="switchTab('beneficiarios')">
-            <span class="icon">👥</span> Beneficiários
-        </button>
-        <button class="nav-tab" data-tab="inscricoes" onclick="switchTab('inscricoes')">
-            <span class="icon">📋</span> Inscrições
-        </button>
-        <button class="nav-tab" data-tab="config" onclick="switchTab('config')">
-            <span class="icon">⚙️</span> Configuração
-        </button>
+    <nav class="nav" id="mainNav">
+        <button class="nav-btn active" data-page="dashboard">📊 Dashboard</button>
+        <button class="nav-btn" data-page="eventos">📅 Eventos</button>
+        <button class="nav-btn" data-page="beneficiarios">👥 Beneficiários</button>
+        <button class="nav-btn" data-page="inscricoes">📋 Inscrições</button>
+        <button class="nav-btn" data-page="config">⚙️ Configuração</button>
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
-        <!-- Dashboard Section -->
-        <section id="dashboard" class="section active">
+    <main class="main">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
             <div class="stats-grid">
-                <div class="stat-card events">
-                    <div class="stat-icon">📅</div>
-                    <div class="stat-value" id="totalEventos">--</div>
+                <div class="stat-card green">
+                    <div class="stat-value" id="statEventos">--</div>
                     <div class="stat-label">Eventos Cadastrados</div>
                 </div>
-                <div class="stat-card beneficiaries">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-value" id="totalBeneficiarios">--</div>
+                <div class="stat-card blue">
+                    <div class="stat-value" id="statBenef">--</div>
                     <div class="stat-label">Beneficiários Ativos</div>
                 </div>
-                <div class="stat-card subscriptions">
-                    <div class="stat-icon">📋</div>
-                    <div class="stat-value" id="totalInscricoes">--</div>
+                <div class="stat-card yellow">
+                    <div class="stat-value" id="statInsc">--</div>
                     <div class="stat-label">Inscrições Realizadas</div>
                 </div>
-                <div class="stat-card attendance">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-value" id="taxaPresenca">--%</div>
+                <div class="stat-card red">
+                    <div class="stat-value" id="statPresenca">--%</div>
                     <div class="stat-label">Taxa de Presença</div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><span class="emoji">📈</span> Próximos Eventos</h2>
-                </div>
+                <div class="card-header">📈 Próximos Eventos</div>
                 <div class="card-body">
-                    <div class="table-container">
-                        <table class="data-table">
+                    <div class="table-wrap">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Evento</th>
                                     <th>Tipo</th>
                                     <th>Data</th>
-                                    <th>Local</th>
                                     <th>Vagas</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="proximosEventosTable">
-                                <tr>
-                                    <td colspan="6" class="empty-state">
-                                        <div class="spinner" style="margin: 0 auto;"></div>
-                                    </td>
-                                </tr>
+                            <tbody id="tblProximos">
+                                <tr><td colspan="4" class="empty">Carregando...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Eventos Section -->
-        <section id="eventos" class="section">
-            <div class="card" style="margin-bottom: 24px;">
-                <div class="card-header">
-                    <h2 class="card-title"><span class="emoji">➕</span> Cadastrar Novo Evento</h2>
-                </div>
+        <!-- EVENTOS -->
+        <div class="page" id="page-eventos">
+            <div class="card">
+                <div class="card-header">➕ Cadastrar Novo Evento</div>
                 <div class="card-body">
-                    <form id="formEvento" onsubmit="salvarEvento(event)">
+                    <form id="formEvento">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label class="form-label">Nome do Evento <span class="required">*</span></label>
-                                <input type="text" class="form-input" id="eventoNome" placeholder="Ex: Curso de Informática Básica" required>
+                                <label class="form-label">Nome <span class="req">*</span></label>
+                                <input type="text" class="form-input" id="evNome" required placeholder="Ex: Curso de Informática">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Tipo <span class="required">*</span></label>
-                                <select class="form-select" id="eventoTipo" required>
+                                <label class="form-label">Tipo <span class="req">*</span></label>
+                                <select class="form-select" id="evTipo" required>
                                     <option value="">Selecione...</option>
                                     <option value="inclusao_digital">💻 Inclusão Digital</option>
                                     <option value="capacitacao_profissional">💼 Capacitação Profissional</option>
@@ -892,29 +528,21 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Data e Hora <span class="required">*</span></label>
-                                <input type="datetime-local" class="form-input" id="eventoData" required>
+                                <label class="form-label">Data e Hora <span class="req">*</span></label>
+                                <input type="datetime-local" class="form-input" id="evData" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Vagas Disponíveis</label>
-                                <input type="number" class="form-input" id="eventoVagas" placeholder="50" min="1" value="50">
+                                <label class="form-label">Vagas</label>
+                                <input type="number" class="form-input" id="evVagas" value="50" min="1">
                             </div>
-                            <div class="form-group full-width">
+                            <div class="form-group full">
                                 <label class="form-label">Local</label>
-                                <input type="text" class="form-input" id="eventoLocal" placeholder="Ex: Centro Comunitário Vila Nova">
-                            </div>
-                            <div class="form-group full-width">
-                                <label class="form-label">Descrição</label>
-                                <textarea class="form-textarea" id="eventoDescricao" placeholder="Descreva o evento..."></textarea>
+                                <input type="text" class="form-input" id="evLocal" placeholder="Ex: Centro Comunitário">
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary" id="btnSalvarEvento">
-                                <span>💾</span> Salvar Evento
-                            </button>
-                            <button type="reset" class="btn btn-secondary">
-                                <span>🔄</span> Limpar
-                            </button>
+                            <button type="submit" class="btn btn-primary">💾 Salvar Evento</button>
+                            <button type="reset" class="btn btn-secondary">🔄 Limpar</button>
                         </div>
                     </form>
                 </div>
@@ -922,71 +550,57 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title"><span class="emoji">📅</span> Eventos Cadastrados</h2>
-                    <button class="btn btn-secondary btn-sm" onclick="carregarEventos()">
-                        <span>🔄</span> Atualizar
-                    </button>
+                    <span>📅 Eventos Cadastrados</span>
+                    <button class="btn btn-secondary btn-sm" id="btnRefreshEv">🔄 Atualizar</button>
                 </div>
                 <div class="card-body">
-                    <div class="table-container">
-                        <table class="data-table">
+                    <div class="table-wrap">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Nome</th>
                                     <th>Tipo</th>
                                     <th>Data</th>
-                                    <th>Local</th>
                                     <th>Vagas</th>
-                                    <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="eventosTable">
-                                <tr>
-                                    <td colspan="7">
-                                        <div class="empty-state">
-                                            <div class="icon">📅</div>
-                                            <h3>Nenhum evento cadastrado</h3>
-                                            <p>Configure a conexão e cadastre o primeiro evento.</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tbody id="tblEventos">
+                                <tr><td colspan="5" class="empty"><div class="empty-icon">📅</div>Nenhum evento</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Beneficiários Section -->
-        <section id="beneficiarios" class="section">
-            <div class="card" style="margin-bottom: 24px;">
-                <div class="card-header">
-                    <h2 class="card-title"><span class="emoji">➕</span> Cadastrar Novo Beneficiário</h2>
-                </div>
+        <!-- BENEFICIÁRIOS -->
+        <div class="page" id="page-beneficiarios">
+            <div class="card">
+                <div class="card-header">➕ Cadastrar Beneficiário</div>
                 <div class="card-body">
-                    <form id="formBeneficiario" onsubmit="salvarBeneficiario(event)">
+                    <form id="formBenef">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label class="form-label">Nome Completo <span class="required">*</span></label>
-                                <input type="text" class="form-input" id="benefNome" placeholder="Ex: Maria Silva Santos" required>
+                                <label class="form-label">Nome Completo <span class="req">*</span></label>
+                                <input type="text" class="form-input" id="bfNome" required placeholder="Ex: Maria Silva">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Idade</label>
-                                <input type="number" class="form-input" id="benefIdade" placeholder="Ex: 35" min="0" max="120">
+                                <input type="number" class="form-input" id="bfIdade" min="0" max="120" placeholder="Ex: 35">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Telefone</label>
-                                <input type="tel" class="form-input" id="benefTelefone" placeholder="(11) 99999-9999">
+                                <input type="tel" class="form-input" id="bfTel" placeholder="(11) 99999-9999">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">E-mail</label>
-                                <input type="email" class="form-input" id="benefEmail" placeholder="email@exemplo.com">
+                                <input type="email" class="form-input" id="bfEmail" placeholder="email@exemplo.com">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Região <span class="required">*</span></label>
-                                <select class="form-select" id="benefRegiao" required>
-                                    <option value="">Selecione a região...</option>
+                                <label class="form-label">Região <span class="req">*</span></label>
+                                <select class="form-select" id="bfRegiao" required>
+                                    <option value="">Selecione...</option>
                                     <option value="Guarulhos">Guarulhos</option>
                                     <option value="Osasco">Osasco</option>
                                     <option value="Santo André">Santo André</option>
@@ -996,22 +610,13 @@
                                     <option value="Itaquera">Itaquera</option>
                                     <option value="Zona Leste">Zona Leste - SP</option>
                                     <option value="Zona Sul">Zona Sul - SP</option>
-                                    <option value="Zona Norte">Zona Norte - SP</option>
                                     <option value="Outra">Outra</option>
                                 </select>
                             </div>
-                            <div class="form-group full-width">
-                                <label class="form-label">Observações</label>
-                                <textarea class="form-textarea" id="benefObs" placeholder="Informações adicionais..."></textarea>
-                            </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary" id="btnSalvarBenef">
-                                <span>💾</span> Salvar Beneficiário
-                            </button>
-                            <button type="reset" class="btn btn-secondary">
-                                <span>🔄</span> Limpar
-                            </button>
+                            <button type="submit" class="btn btn-primary">💾 Salvar Beneficiário</button>
+                            <button type="reset" class="btn btn-secondary">🔄 Limpar</button>
                         </div>
                     </form>
                 </div>
@@ -1019,65 +624,52 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title"><span class="emoji">👥</span> Beneficiários Cadastrados</h2>
-                    <button class="btn btn-secondary btn-sm" onclick="carregarBeneficiarios()">
-                        <span>🔄</span> Atualizar
-                    </button>
+                    <span>👥 Beneficiários Cadastrados</span>
+                    <button class="btn btn-secondary btn-sm" id="btnRefreshBf">🔄 Atualizar</button>
                 </div>
                 <div class="card-body">
-                    <div class="table-container">
-                        <table class="data-table">
+                    <div class="table-wrap">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Nome</th>
                                     <th>Idade</th>
                                     <th>Telefone</th>
-                                    <th>E-mail</th>
                                     <th>Região</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="beneficiariosTable">
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="empty-state">
-                                            <div class="icon">👥</div>
-                                            <h3>Nenhum beneficiário cadastrado</h3>
-                                            <p>Configure a conexão e cadastre o primeiro beneficiário.</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tbody id="tblBenef">
+                                <tr><td colspan="5" class="empty"><div class="empty-icon">👥</div>Nenhum beneficiário</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Inscrições Section -->
-        <section id="inscricoes" class="section">
-            <div class="card" style="margin-bottom: 24px;">
-                <div class="card-header">
-                    <h2 class="card-title"><span class="emoji">➕</span> Nova Inscrição</h2>
-                </div>
+        <!-- INSCRIÇÕES -->
+        <div class="page" id="page-inscricoes">
+            <div class="card">
+                <div class="card-header">➕ Nova Inscrição</div>
                 <div class="card-body">
-                    <form id="formInscricao" onsubmit="salvarInscricao(event)">
+                    <form id="formInsc">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label class="form-label">Beneficiário <span class="required">*</span></label>
-                                <select class="form-select" id="inscBeneficiario" required>
-                                    <option value="">Selecione o beneficiário...</option>
+                                <label class="form-label">Beneficiário <span class="req">*</span></label>
+                                <select class="form-select" id="inBenef" required>
+                                    <option value="">Selecione...</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Evento <span class="required">*</span></label>
-                                <select class="form-select" id="inscEvento" required>
-                                    <option value="">Selecione o evento...</option>
+                                <label class="form-label">Evento <span class="req">*</span></label>
+                                <select class="form-select" id="inEvento" required>
+                                    <option value="">Selecione...</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Status</label>
-                                <select class="form-select" id="inscStatus">
+                                <select class="form-select" id="inStatus">
                                     <option value="inscrito">📝 Inscrito</option>
                                     <option value="confirmado">✅ Confirmado</option>
                                     <option value="lista_espera">⏳ Lista de Espera</option>
@@ -1085,9 +677,7 @@
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary" id="btnSalvarInsc">
-                                <span>💾</span> Realizar Inscrição
-                            </button>
+                            <button type="submit" class="btn btn-primary">💾 Realizar Inscrição</button>
                         </div>
                     </form>
                 </div>
@@ -1095,152 +685,191 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title"><span class="emoji">📋</span> Inscrições Realizadas</h2>
-                    <button class="btn btn-secondary btn-sm" onclick="carregarInscricoes()">
-                        <span>🔄</span> Atualizar
-                    </button>
+                    <span>📋 Inscrições Realizadas</span>
+                    <button class="btn btn-secondary btn-sm" id="btnRefreshIn">🔄 Atualizar</button>
                 </div>
                 <div class="card-body">
-                    <div class="table-container">
-                        <table class="data-table">
+                    <div class="table-wrap">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Beneficiário</th>
                                     <th>Evento</th>
-                                    <th>Data Inscrição</th>
                                     <th>Status</th>
                                     <th>Presença</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="inscricoesTable">
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="empty-state">
-                                            <div class="icon">📋</div>
-                                            <h3>Nenhuma inscrição realizada</h3>
-                                            <p>Configure a conexão e realize a primeira inscrição.</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tbody id="tblInsc">
+                                <tr><td colspan="5" class="empty"><div class="empty-icon">📋</div>Nenhuma inscrição</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Config Section -->
-        <section id="config" class="section">
-            <div class="config-panel">
-                <h3 class="config-title">🔐 Configuração do Supabase</h3>
-                <p style="margin-bottom: 20px; opacity: 0.8; font-size: 0.95rem;">
-                    Insira as credenciais do seu projeto Supabase. Você encontra essas informações em: 
-                    <strong>Settings → API</strong>
+        <!-- CONFIGURAÇÃO -->
+        <div class="page" id="page-config">
+            <div class="config-box">
+                <h3>🔐 Configuração do Supabase</h3>
+                <p style="margin-bottom: 20px; opacity: 0.8;">
+                    Insira suas credenciais do Supabase. Encontre em: Settings → API
                 </p>
                 <div class="config-grid">
                     <div>
                         <div class="config-label">URL do Projeto</div>
-                        <input type="text" class="config-input" id="supabaseUrl" placeholder="https://xxxxx.supabase.co">
+                        <input type="text" class="config-input" id="cfgUrl" placeholder="https://xxxxx.supabase.co">
                     </div>
                     <div>
                         <div class="config-label">Anon Key (Chave Pública)</div>
-                        <input type="text" class="config-input" id="supabaseKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+                        <input type="text" class="config-input" id="cfgKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
                     </div>
                 </div>
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-primary" onclick="conectarSupabase()">
-                        <span>🔗</span> Conectar ao Supabase
-                    </button>
-                    <button class="btn btn-secondary" onclick="testarConexao()" style="margin-left: 12px;">
-                        <span>🧪</span> Testar Conexão
-                    </button>
-                </div>
+                <button class="btn btn-primary" id="btnConectar">🔗 Conectar ao Supabase</button>
+                <button class="btn btn-secondary" id="btnTestar" style="margin-left: 10px;">🧪 Testar Conexão</button>
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><span class="emoji">📖</span> Instruções de Configuração</h2>
-                </div>
+                <div class="card-header">📖 Instruções</div>
                 <div class="card-body">
-                    <div style="line-height: 1.8;">
-                        <p><strong>1.</strong> Acesse seu projeto no <a href="https://supabase.com/dashboard" target="_blank" style="color: var(--primary);">Supabase Dashboard</a></p>
-                        <p><strong>2.</strong> Vá em <strong>Settings</strong> (ícone de engrenagem) → <strong>API</strong></p>
-                        <p><strong>3.</strong> Copie a <strong>URL</strong> do projeto (Project URL)</p>
-                        <p><strong>4.</strong> Copie a <strong>anon public</strong> key (não a secret!)</p>
-                        <p><strong>5.</strong> Cole os valores acima e clique em <strong>Conectar</strong></p>
-                        <br>
-                        <p style="color: var(--gray);">
-                            <strong>💡 Dica:</strong> As credenciais são salvas no localStorage do navegador para sua conveniência.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Modal de Confirmação -->
-    <div class="modal-overlay" id="modalConfirm">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">Confirmar Ação</h3>
-                <button class="modal-close" onclick="fecharModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="modalMessage">Tem certeza que deseja realizar esta ação?</p>
-                <div class="form-actions" style="justify-content: flex-end;">
-                    <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
-                    <button class="btn btn-danger" id="modalConfirmBtn">Confirmar</button>
+                    <p><strong>1.</strong> Acesse seu projeto no <a href="https://supabase.com/dashboard" target="_blank" style="color: #10B981;">Supabase Dashboard</a></p>
+                    <p style="margin-top: 10px;"><strong>2.</strong> Vá em <strong>Settings</strong> → <strong>API</strong></p>
+                    <p style="margin-top: 10px;"><strong>3.</strong> Copie a <strong>Project URL</strong> e a <strong>anon public key</strong></p>
+                    <p style="margin-top: 10px;"><strong>4.</strong> Cole os valores acima e clique em <strong>Conectar</strong></p>
                 </div>
             </div>
         </div>
-    </div>
+
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toasts"></div>
 
     <script>
-        // ============================================
+        // ========================================
         // VARIÁVEIS GLOBAIS
-        // ============================================
-        let supabase = null;
+        // ========================================
+        let supabaseClient = null;
         let eventos = [];
         let beneficiarios = [];
         let inscricoes = [];
 
-        // ============================================
-        // INICIALIZAÇÃO
-        // ============================================
-        document.addEventListener('DOMContentLoaded', () => {
-            // Carregar credenciais salvas
-            const savedUrl = localStorage.getItem('supabaseUrl');
-            const savedKey = localStorage.getItem('supabaseKey');
-            
-            if (savedUrl && savedKey) {
-                document.getElementById('supabaseUrl').value = savedUrl;
-                document.getElementById('supabaseKey').value = savedKey;
-                conectarSupabase(true);
+        // Credenciais do Supabase (pré-configuradas)
+        const SUPABASE_URL = 'https://qjcswzccdhgpvmsqofap.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_zyxdXbQNX6A7wm1SXbqbPw_yi31OX5I';
+
+        // ========================================
+        // NAVEGAÇÃO - FUNCIONA 100%
+        // ========================================
+        document.getElementById('mainNav').addEventListener('click', function(e) {
+            if (e.target.classList.contains('nav-btn')) {
+                // Remove active de todos
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                
+                // Adiciona active no clicado
+                e.target.classList.add('active');
+                const pageId = 'page-' + e.target.getAttribute('data-page');
+                document.getElementById(pageId).classList.add('active');
+                
+                console.log('Navegou para:', pageId);
             }
         });
 
-        // ============================================
-        // CONEXÃO COM SUPABASE
-        // ============================================
-        async function conectarSupabase(silent = false) {
-            const url = document.getElementById('supabaseUrl').value.trim();
-            const key = document.getElementById('supabaseKey').value.trim();
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sistema iniciado!');
+            
+            // Preencher campos com credenciais pré-configuradas
+            document.getElementById('cfgUrl').value = SUPABASE_URL;
+            document.getElementById('cfgKey').value = SUPABASE_KEY;
+            
+            // Verificar se a biblioteca Supabase carregou
+            if (typeof window.supabase === 'undefined') {
+                console.error('❌ Biblioteca Supabase NÃO carregou!');
+                document.getElementById('statusText').textContent = 'Sem internet';
+                toast('error', 'Conecte-se à internet para usar o sistema');
+            } else {
+                console.log('✅ Biblioteca Supabase carregada!');
+                // Conectar automaticamente
+                conectarAuto();
+            }
+
+            // Event Listeners dos formulários
+            document.getElementById('formEvento').addEventListener('submit', salvarEvento);
+            document.getElementById('formBenef').addEventListener('submit', salvarBeneficiario);
+            document.getElementById('formInsc').addEventListener('submit', salvarInscricao);
+            
+            // Botões de configuração
+            document.getElementById('btnConectar').addEventListener('click', function() { conectar(false); });
+            document.getElementById('btnTestar').addEventListener('click', testarConexao);
+            
+            // Botões de refresh
+            document.getElementById('btnRefreshEv').addEventListener('click', carregarEventos);
+            document.getElementById('btnRefreshBf').addEventListener('click', carregarBeneficiarios);
+            document.getElementById('btnRefreshIn').addEventListener('click', carregarInscricoes);
+        });
+
+        // ========================================
+        // CONEXÃO SUPABASE
+        // ========================================
+        
+        // Conexão automática com credenciais pré-configuradas
+        async function conectarAuto() {
+            try {
+                console.log('Tentando conectar ao Supabase...');
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                
+                // Testar conexão
+                const { data, error } = await supabaseClient.from('eventos').select('count', { count: 'exact', head: true });
+                
+                if (error) {
+                    console.error('Erro na conexão:', error);
+                    throw error;
+                }
+
+                // Atualizar status
+                document.getElementById('statusDot').classList.add('connected');
+                document.getElementById('statusText').textContent = 'Conectado';
+                console.log('✅ Conectado ao Supabase!');
+                
+                toast('success', 'Conectado ao Supabase!');
+
+                // Carregar dados
+                await carregarTudo();
+
+            } catch (error) {
+                console.error('Erro ao conectar:', error);
+                document.getElementById('statusDot').classList.remove('connected');
+                document.getElementById('statusText').textContent = 'Erro: ' + (error.message || 'Falha na conexão');
+                toast('error', 'Erro: ' + (error.message || 'Verifique as credenciais'));
+            }
+        }
+        
+        async function conectar(silent) {
+            // Verificar se a biblioteca carregou
+            if (typeof window.supabase === 'undefined') {
+                toast('error', 'Biblioteca não carregou. Verifique sua conexão com a internet.');
+                console.error('Supabase library not loaded. Make sure you have internet connection.');
+                return;
+            }
+
+            const url = document.getElementById('cfgUrl').value.trim();
+            const key = document.getElementById('cfgKey').value.trim();
 
             if (!url || !key) {
-                if (!silent) showToast('error', 'Erro', 'Preencha a URL e a Key do Supabase');
+                if (!silent) toast('error', 'Preencha URL e Key');
                 return;
             }
 
             try {
-                supabase = window.supabase.createClient(url, key);
+                supabaseClient = window.supabase.createClient(url, key);
                 
                 // Testar conexão
-                const { data, error } = await supabase.from('eventos').select('count', { count: 'exact', head: true });
-                
+                const { error } = await supabaseClient.from('eventos').select('count', { count: 'exact', head: true });
                 if (error) throw error;
 
                 // Salvar credenciais
@@ -1248,636 +877,357 @@
                 localStorage.setItem('supabaseKey', key);
 
                 // Atualizar status
-                atualizarStatusConexao(true);
+                document.getElementById('statusDot').classList.add('connected');
+                document.getElementById('statusText').textContent = 'Conectado';
                 
-                if (!silent) showToast('success', 'Conectado!', 'Conexão estabelecida com sucesso');
+                if (!silent) toast('success', 'Conectado com sucesso!');
 
                 // Carregar dados
-                await carregarTodosDados();
+                await carregarTudo();
 
             } catch (error) {
-                console.error('Erro na conexão:', error);
-                atualizarStatusConexao(false);
-                if (!silent) showToast('error', 'Erro de Conexão', error.message || 'Verifique as credenciais');
+                console.error('Erro:', error);
+                document.getElementById('statusDot').classList.remove('connected');
+                document.getElementById('statusText').textContent = 'Erro na conexão';
+                if (!silent) toast('error', 'Erro: ' + error.message);
             }
         }
 
         async function testarConexao() {
-            if (!supabase) {
-                showToast('error', 'Erro', 'Configure a conexão primeiro');
+            if (!supabaseClient) {
+                toast('error', 'Configure a conexão primeiro');
                 return;
             }
-
             try {
-                const { data, error } = await supabase.from('eventos').select('count', { count: 'exact', head: true });
+                const { error } = await supabaseClient.from('eventos').select('count', { count: 'exact', head: true });
                 if (error) throw error;
-                showToast('success', 'Sucesso!', 'Conexão funcionando corretamente');
+                toast('success', 'Conexão OK!');
             } catch (error) {
-                showToast('error', 'Falha no Teste', error.message);
+                toast('error', 'Falha: ' + error.message);
             }
         }
 
-        function atualizarStatusConexao(conectado) {
-            const dot = document.getElementById('statusDot');
-            const text = document.getElementById('statusText');
-            
-            if (conectado) {
-                dot.classList.remove('disconnected');
-                text.textContent = 'Conectado';
-            } else {
-                dot.classList.add('disconnected');
-                text.textContent = 'Desconectado';
-            }
-        }
-
-        // ============================================
+        // ========================================
         // CARREGAR DADOS
-        // ============================================
-        async function carregarTodosDados() {
-            await Promise.all([
-                carregarEventos(),
-                carregarBeneficiarios(),
-                carregarInscricoes(),
-                carregarEstatisticas()
-            ]);
+        // ========================================
+        async function carregarTudo() {
+            await carregarEventos();
+            await carregarBeneficiarios();
+            await carregarInscricoes();
+            await carregarStats();
         }
 
-        async function carregarEstatisticas() {
-            if (!supabase) return;
-
+        async function carregarStats() {
+            if (!supabaseClient) return;
             try {
-                // Total de eventos
-                const { count: totalEventos } = await supabase
-                    .from('eventos')
-                    .select('*', { count: 'exact', head: true });
+                const { count: ev } = await supabaseClient.from('eventos').select('*', { count: 'exact', head: true });
+                const { count: bf } = await supabaseClient.from('beneficiarios').select('*', { count: 'exact', head: true }).eq('ativo', true);
+                const { count: insc } = await supabaseClient.from('inscricoes').select('*', { count: 'exact', head: true });
+                const { data: presData } = await supabaseClient.from('inscricoes').select('presenca');
                 
-                document.getElementById('totalEventos').textContent = totalEventos || 0;
-
-                // Total de beneficiários
-                const { count: totalBenef } = await supabase
-                    .from('beneficiarios')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('ativo', true);
+                document.getElementById('statEventos').textContent = ev || 0;
+                document.getElementById('statBenef').textContent = bf || 0;
+                document.getElementById('statInsc').textContent = insc || 0;
                 
-                document.getElementById('totalBeneficiarios').textContent = totalBenef || 0;
-
-                // Total de inscrições
-                const { count: totalInsc } = await supabase
-                    .from('inscricoes')
-                    .select('*', { count: 'exact', head: true });
-                
-                document.getElementById('totalInscricoes').textContent = totalInsc || 0;
-
-                // Taxa de presença
-                const { data: presencaData } = await supabase
-                    .from('inscricoes')
-                    .select('presenca');
-                
-                if (presencaData && presencaData.length > 0) {
-                    const presentes = presencaData.filter(i => i.presenca).length;
-                    const taxa = Math.round((presentes / presencaData.length) * 100);
-                    document.getElementById('taxaPresenca').textContent = taxa + '%';
+                if (presData && presData.length > 0) {
+                    const pres = presData.filter(p => p.presenca).length;
+                    const taxa = Math.round((pres / presData.length) * 100);
+                    document.getElementById('statPresenca').textContent = taxa + '%';
                 }
-
-            } catch (error) {
-                console.error('Erro ao carregar estatísticas:', error);
+            } catch (e) {
+                console.error('Erro stats:', e);
             }
         }
 
         async function carregarEventos() {
-            if (!supabase) return;
-
+            if (!supabaseClient) return;
             try {
-                const { data, error } = await supabase
-                    .from('eventos')
-                    .select('*')
-                    .order('data_evento', { ascending: true });
-
+                const { data, error } = await supabaseClient.from('eventos').select('*').order('data_evento', { ascending: true });
                 if (error) throw error;
-
                 eventos = data || [];
-                renderizarEventos();
-                renderizarProximosEventos();
+                renderEventos();
+                renderProximos();
                 atualizarSelectEventos();
-
-            } catch (error) {
-                console.error('Erro ao carregar eventos:', error);
-                showToast('error', 'Erro', 'Não foi possível carregar os eventos');
+            } catch (e) {
+                console.error('Erro eventos:', e);
             }
         }
 
         async function carregarBeneficiarios() {
-            if (!supabase) return;
-
+            if (!supabaseClient) return;
             try {
-                const { data, error } = await supabase
-                    .from('beneficiarios')
-                    .select('*')
-                    .eq('ativo', true)
-                    .order('nome', { ascending: true });
-
+                const { data, error } = await supabaseClient.from('beneficiarios').select('*').eq('ativo', true).order('nome');
                 if (error) throw error;
-
                 beneficiarios = data || [];
-                renderizarBeneficiarios();
+                renderBeneficiarios();
                 atualizarSelectBeneficiarios();
-
-            } catch (error) {
-                console.error('Erro ao carregar beneficiários:', error);
-                showToast('error', 'Erro', 'Não foi possível carregar os beneficiários');
+            } catch (e) {
+                console.error('Erro beneficiarios:', e);
             }
         }
 
         async function carregarInscricoes() {
-            if (!supabase) return;
-
+            if (!supabaseClient) return;
             try {
-                const { data, error } = await supabase
-                    .from('inscricoes')
-                    .select(`
-                        *,
-                        beneficiarios (nome),
-                        eventos (nome)
-                    `)
-                    .order('data_inscricao', { ascending: false });
-
+                const { data, error } = await supabaseClient.from('inscricoes').select('*, beneficiarios(nome), eventos(nome)').order('data_inscricao', { ascending: false });
                 if (error) throw error;
-
                 inscricoes = data || [];
-                renderizarInscricoes();
-
-            } catch (error) {
-                console.error('Erro ao carregar inscrições:', error);
-                showToast('error', 'Erro', 'Não foi possível carregar as inscrições');
+                renderInscricoes();
+            } catch (e) {
+                console.error('Erro inscricoes:', e);
             }
         }
 
-        // ============================================
+        // ========================================
         // RENDERIZAÇÃO
-        // ============================================
-        function renderizarEventos() {
-            const tbody = document.getElementById('eventosTable');
-            
+        // ========================================
+        function renderEventos() {
+            const tbody = document.getElementById('tblEventos');
             if (eventos.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7">
-                            <div class="empty-state">
-                                <div class="icon">📅</div>
-                                <h3>Nenhum evento cadastrado</h3>
-                                <p>Cadastre o primeiro evento usando o formulário acima.</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                tbody.innerHTML = '<tr><td colspan="5" class="empty"><div class="empty-icon">📅</div>Nenhum evento cadastrado</td></tr>';
                 return;
             }
-
             tbody.innerHTML = eventos.map(e => `
                 <tr>
                     <td><strong>${e.nome}</strong></td>
-                    <td>${getBadgeTipo(e.tipo_evento)}</td>
-                    <td>${formatarData(e.data_evento)}</td>
-                    <td>${e.local || '-'}</td>
-                    <td>${e.vagas_disponiveis || e.vagas}/${e.vagas}</td>
-                    <td>${getBadgeStatus(e.status)}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="excluirEvento('${e.id}')">
-                            🗑️
-                        </button>
-                    </td>
+                    <td>${badgeTipo(e.tipo_evento)}</td>
+                    <td>${formatData(e.data_evento)}</td>
+                    <td>${e.vagas}</td>
+                    <td><button class="btn btn-danger" onclick="excluirEvento('${e.id}')">🗑️</button></td>
                 </tr>
             `).join('');
         }
 
-        function renderizarProximosEventos() {
-            const tbody = document.getElementById('proximosEventosTable');
+        function renderProximos() {
+            const tbody = document.getElementById('tblProximos');
             const hoje = new Date();
-            const proximos = eventos
-                .filter(e => new Date(e.data_evento) >= hoje && e.status === 'ativo')
-                .slice(0, 5);
-
+            const proximos = eventos.filter(e => new Date(e.data_evento) >= hoje).slice(0, 5);
+            
             if (proximos.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--gray);">
-                            Nenhum evento próximo encontrado
-                        </td>
-                    </tr>
-                `;
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:#6b7280;">Nenhum evento próximo</td></tr>';
                 return;
             }
-
             tbody.innerHTML = proximos.map(e => `
                 <tr>
                     <td><strong>${e.nome}</strong></td>
-                    <td>${getBadgeTipo(e.tipo_evento)}</td>
-                    <td>${formatarData(e.data_evento)}</td>
-                    <td>${e.local || '-'}</td>
-                    <td>${e.vagas_disponiveis || e.vagas}/${e.vagas}</td>
-                    <td>${getBadgeStatus(e.status)}</td>
+                    <td>${badgeTipo(e.tipo_evento)}</td>
+                    <td>${formatData(e.data_evento)}</td>
+                    <td>${e.vagas}</td>
                 </tr>
             `).join('');
         }
 
-        function renderizarBeneficiarios() {
-            const tbody = document.getElementById('beneficiariosTable');
-            
+        function renderBeneficiarios() {
+            const tbody = document.getElementById('tblBenef');
             if (beneficiarios.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-state">
-                                <div class="icon">👥</div>
-                                <h3>Nenhum beneficiário cadastrado</h3>
-                                <p>Cadastre o primeiro beneficiário usando o formulário acima.</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                tbody.innerHTML = '<tr><td colspan="5" class="empty"><div class="empty-icon">👥</div>Nenhum beneficiário</td></tr>';
                 return;
             }
-
             tbody.innerHTML = beneficiarios.map(b => `
                 <tr>
                     <td><strong>${b.nome}</strong></td>
                     <td>${b.idade || '-'}</td>
                     <td>${b.telefone || '-'}</td>
-                    <td>${b.email || '-'}</td>
-                    <td><span class="badge badge-info">${b.regiao}</span></td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="excluirBeneficiario('${b.id}')">
-                            🗑️
-                        </button>
-                    </td>
+                    <td><span class="badge badge-blue">${b.regiao}</span></td>
+                    <td><button class="btn btn-danger" onclick="excluirBeneficiario('${b.id}')">🗑️</button></td>
                 </tr>
             `).join('');
         }
 
-        function renderizarInscricoes() {
-            const tbody = document.getElementById('inscricoesTable');
-            
+        function renderInscricoes() {
+            const tbody = document.getElementById('tblInsc');
             if (inscricoes.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-state">
-                                <div class="icon">📋</div>
-                                <h3>Nenhuma inscrição realizada</h3>
-                                <p>Realize a primeira inscrição usando o formulário acima.</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                tbody.innerHTML = '<tr><td colspan="5" class="empty"><div class="empty-icon">📋</div>Nenhuma inscrição</td></tr>';
                 return;
             }
-
             tbody.innerHTML = inscricoes.map(i => `
                 <tr>
                     <td><strong>${i.beneficiarios?.nome || 'N/A'}</strong></td>
                     <td>${i.eventos?.nome || 'N/A'}</td>
-                    <td>${formatarData(i.data_inscricao)}</td>
-                    <td>${getBadgeStatusInscricao(i.status)}</td>
+                    <td>${badgeStatus(i.status)}</td>
                     <td>
-                        <button class="btn btn-sm ${i.presenca ? 'btn-primary' : 'btn-secondary'}" 
-                                onclick="togglePresenca('${i.id}', ${!i.presenca})">
-                            ${i.presenca ? '✅ Presente' : '⬜ Ausente'}
+                        <button class="btn btn-sm ${i.presenca ? 'btn-primary' : 'btn-secondary'}" onclick="togglePresenca('${i.id}', ${!i.presenca})">
+                            ${i.presenca ? '✅ Sim' : '⬜ Não'}
                         </button>
                     </td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="excluirInscricao('${i.id}')">
-                            🗑️
-                        </button>
-                    </td>
+                    <td><button class="btn btn-danger" onclick="excluirInscricao('${i.id}')">🗑️</button></td>
                 </tr>
             `).join('');
         }
 
         function atualizarSelectEventos() {
-            const select = document.getElementById('inscEvento');
-            const eventosAtivos = eventos.filter(e => e.status === 'ativo');
-            
-            select.innerHTML = '<option value="">Selecione o evento...</option>' +
-                eventosAtivos.map(e => `
-                    <option value="${e.id}">${e.nome} - ${formatarData(e.data_evento)}</option>
-                `).join('');
+            const sel = document.getElementById('inEvento');
+            sel.innerHTML = '<option value="">Selecione...</option>' + eventos.filter(e => e.status === 'ativo' || !e.status).map(e => `<option value="${e.id}">${e.nome}</option>`).join('');
         }
 
         function atualizarSelectBeneficiarios() {
-            const select = document.getElementById('inscBeneficiario');
-            
-            select.innerHTML = '<option value="">Selecione o beneficiário...</option>' +
-                beneficiarios.map(b => `
-                    <option value="${b.id}">${b.nome}</option>
-                `).join('');
+            const sel = document.getElementById('inBenef');
+            sel.innerHTML = '<option value="">Selecione...</option>' + beneficiarios.map(b => `<option value="${b.id}">${b.nome}</option>`).join('');
         }
 
-        // ============================================
+        // ========================================
         // SALVAR DADOS
-        // ============================================
-        async function salvarEvento(event) {
-            event.preventDefault();
-            
-            if (!supabase) {
-                showToast('error', 'Erro', 'Configure a conexão com o Supabase primeiro');
-                return;
-            }
-
-            const btn = document.getElementById('btnSalvarEvento');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> Salvando...';
+        // ========================================
+        async function salvarEvento(e) {
+            e.preventDefault();
+            if (!supabaseClient) { toast('error', 'Configure a conexão primeiro'); return; }
 
             try {
-                const novoEvento = {
-                    nome: document.getElementById('eventoNome').value,
-                    tipo_evento: document.getElementById('eventoTipo').value,
-                    data_evento: document.getElementById('eventoData').value,
-                    local: document.getElementById('eventoLocal').value || null,
-                    vagas: parseInt(document.getElementById('eventoVagas').value) || 50,
-                    vagas_disponiveis: parseInt(document.getElementById('eventoVagas').value) || 50,
-                    descricao: document.getElementById('eventoDescricao').value || null,
+                const { error } = await supabaseClient.from('eventos').insert([{
+                    nome: document.getElementById('evNome').value,
+                    tipo_evento: document.getElementById('evTipo').value,
+                    data_evento: document.getElementById('evData').value,
+                    vagas: parseInt(document.getElementById('evVagas').value) || 50,
+                    vagas_disponiveis: parseInt(document.getElementById('evVagas').value) || 50,
+                    local: document.getElementById('evLocal').value || null,
                     status: 'ativo'
-                };
-
-                const { data, error } = await supabase
-                    .from('eventos')
-                    .insert([novoEvento])
-                    .select();
-
+                }]);
                 if (error) throw error;
-
-                showToast('success', 'Sucesso!', 'Evento cadastrado com sucesso');
+                toast('success', 'Evento cadastrado!');
                 document.getElementById('formEvento').reset();
                 await carregarEventos();
-                await carregarEstatisticas();
-
+                await carregarStats();
             } catch (error) {
-                console.error('Erro ao salvar evento:', error);
-                showToast('error', 'Erro', error.message || 'Não foi possível salvar o evento');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<span>💾</span> Salvar Evento';
+                toast('error', 'Erro: ' + error.message);
             }
         }
 
-        async function salvarBeneficiario(event) {
-            event.preventDefault();
-            
-            if (!supabase) {
-                showToast('error', 'Erro', 'Configure a conexão com o Supabase primeiro');
-                return;
-            }
-
-            const btn = document.getElementById('btnSalvarBenef');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> Salvando...';
+        async function salvarBeneficiario(e) {
+            e.preventDefault();
+            if (!supabaseClient) { toast('error', 'Configure a conexão primeiro'); return; }
 
             try {
-                const novoBeneficiario = {
-                    nome: document.getElementById('benefNome').value,
-                    idade: parseInt(document.getElementById('benefIdade').value) || null,
-                    telefone: document.getElementById('benefTelefone').value || null,
-                    email: document.getElementById('benefEmail').value || null,
-                    regiao: document.getElementById('benefRegiao').value,
-                    observacoes: document.getElementById('benefObs').value || null,
+                const { error } = await supabaseClient.from('beneficiarios').insert([{
+                    nome: document.getElementById('bfNome').value,
+                    idade: parseInt(document.getElementById('bfIdade').value) || null,
+                    telefone: document.getElementById('bfTel').value || null,
+                    email: document.getElementById('bfEmail').value || null,
+                    regiao: document.getElementById('bfRegiao').value,
                     ativo: true
-                };
-
-                const { data, error } = await supabase
-                    .from('beneficiarios')
-                    .insert([novoBeneficiario])
-                    .select();
-
+                }]);
                 if (error) throw error;
-
-                showToast('success', 'Sucesso!', 'Beneficiário cadastrado com sucesso');
-                document.getElementById('formBeneficiario').reset();
+                toast('success', 'Beneficiário cadastrado!');
+                document.getElementById('formBenef').reset();
                 await carregarBeneficiarios();
-                await carregarEstatisticas();
-
+                await carregarStats();
             } catch (error) {
-                console.error('Erro ao salvar beneficiário:', error);
-                showToast('error', 'Erro', error.message || 'Não foi possível salvar o beneficiário');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<span>💾</span> Salvar Beneficiário';
+                toast('error', 'Erro: ' + error.message);
             }
         }
 
-        async function salvarInscricao(event) {
-            event.preventDefault();
-            
-            if (!supabase) {
-                showToast('error', 'Erro', 'Configure a conexão com o Supabase primeiro');
-                return;
-            }
-
-            const btn = document.getElementById('btnSalvarInsc');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> Salvando...';
+        async function salvarInscricao(e) {
+            e.preventDefault();
+            if (!supabaseClient) { toast('error', 'Configure a conexão primeiro'); return; }
 
             try {
-                const novaInscricao = {
-                    beneficiario_id: document.getElementById('inscBeneficiario').value,
-                    evento_id: document.getElementById('inscEvento').value,
-                    status: document.getElementById('inscStatus').value,
+                const { error } = await supabaseClient.from('inscricoes').insert([{
+                    beneficiario_id: document.getElementById('inBenef').value,
+                    evento_id: document.getElementById('inEvento').value,
+                    status: document.getElementById('inStatus').value,
                     presenca: false
-                };
-
-                const { data, error } = await supabase
-                    .from('inscricoes')
-                    .insert([novaInscricao])
-                    .select();
-
+                }]);
                 if (error) {
-                    if (error.code === '23505') {
-                        throw new Error('Este beneficiário já está inscrito neste evento');
-                    }
+                    if (error.code === '23505') throw new Error('Já inscrito neste evento');
                     throw error;
                 }
-
-                showToast('success', 'Sucesso!', 'Inscrição realizada com sucesso');
-                document.getElementById('formInscricao').reset();
+                toast('success', 'Inscrição realizada!');
+                document.getElementById('formInsc').reset();
                 await carregarInscricoes();
-                await carregarEventos();
-                await carregarEstatisticas();
-
+                await carregarStats();
             } catch (error) {
-                console.error('Erro ao salvar inscrição:', error);
-                showToast('error', 'Erro', error.message || 'Não foi possível realizar a inscrição');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<span>💾</span> Realizar Inscrição';
+                toast('error', 'Erro: ' + error.message);
             }
         }
 
-        // ============================================
+        // ========================================
         // AÇÕES
-        // ============================================
-        async function togglePresenca(id, novoValor) {
-            if (!supabase) return;
-
+        // ========================================
+        async function togglePresenca(id, valor) {
+            if (!supabaseClient) return;
             try {
-                const { error } = await supabase
-                    .from('inscricoes')
-                    .update({ presenca: novoValor })
-                    .eq('id', id);
-
+                const { error } = await supabaseClient.from('inscricoes').update({ presenca: valor }).eq('id', id);
                 if (error) throw error;
-
                 await carregarInscricoes();
-                await carregarEstatisticas();
-                showToast('success', 'Atualizado!', `Presença ${novoValor ? 'confirmada' : 'removida'}`);
-
-            } catch (error) {
-                showToast('error', 'Erro', 'Não foi possível atualizar a presença');
+                await carregarStats();
+            } catch (e) {
+                toast('error', 'Erro ao atualizar');
             }
         }
 
         async function excluirEvento(id) {
-            if (!confirm('Tem certeza que deseja excluir este evento? Todas as inscrições serão removidas.')) return;
-            
+            if (!confirm('Excluir este evento?')) return;
             try {
-                const { error } = await supabase
-                    .from('eventos')
-                    .delete()
-                    .eq('id', id);
-
+                const { error } = await supabaseClient.from('eventos').delete().eq('id', id);
                 if (error) throw error;
-
-                showToast('success', 'Excluído!', 'Evento removido com sucesso');
-                await carregarTodosDados();
-
-            } catch (error) {
-                showToast('error', 'Erro', 'Não foi possível excluir o evento');
+                toast('success', 'Evento excluído');
+                await carregarTudo();
+            } catch (e) {
+                toast('error', 'Erro ao excluir');
             }
         }
 
         async function excluirBeneficiario(id) {
-            if (!confirm('Tem certeza que deseja excluir este beneficiário?')) return;
-            
+            if (!confirm('Excluir este beneficiário?')) return;
             try {
-                const { error } = await supabase
-                    .from('beneficiarios')
-                    .update({ ativo: false })
-                    .eq('id', id);
-
+                const { error } = await supabaseClient.from('beneficiarios').update({ ativo: false }).eq('id', id);
                 if (error) throw error;
-
-                showToast('success', 'Excluído!', 'Beneficiário removido com sucesso');
-                await carregarTodosDados();
-
-            } catch (error) {
-                showToast('error', 'Erro', 'Não foi possível excluir o beneficiário');
+                toast('success', 'Beneficiário excluído');
+                await carregarTudo();
+            } catch (e) {
+                toast('error', 'Erro ao excluir');
             }
         }
 
         async function excluirInscricao(id) {
-            if (!confirm('Tem certeza que deseja cancelar esta inscrição?')) return;
-            
+            if (!confirm('Cancelar esta inscrição?')) return;
             try {
-                const { error } = await supabase
-                    .from('inscricoes')
-                    .delete()
-                    .eq('id', id);
-
+                const { error } = await supabaseClient.from('inscricoes').delete().eq('id', id);
                 if (error) throw error;
-
-                showToast('success', 'Cancelada!', 'Inscrição removida com sucesso');
-                await carregarTodosDados();
-
-            } catch (error) {
-                showToast('error', 'Erro', 'Não foi possível cancelar a inscrição');
+                toast('success', 'Inscrição cancelada');
+                await carregarTudo();
+            } catch (e) {
+                toast('error', 'Erro ao cancelar');
             }
         }
 
-        // ============================================
+        // ========================================
         // UTILITÁRIOS
-        // ============================================
-        function switchTab(tabId) {
-            // Remover active de todas as tabs
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            
-            // Adicionar active na tab clicada
-            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-            document.getElementById(tabId).classList.add('active');
+        // ========================================
+        function formatData(str) {
+            if (!str) return '-';
+            return new Date(str).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         }
 
-        function formatarData(dataStr) {
-            if (!dataStr) return '-';
-            const data = new Date(dataStr);
-            return data.toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-
-        function getBadgeTipo(tipo) {
+        function badgeTipo(tipo) {
             const tipos = {
-                'inclusao_digital': '<span class="badge badge-info">💻 Inclusão Digital</span>',
+                'inclusao_digital': '<span class="badge badge-blue">💻 Inclusão Digital</span>',
                 'capacitacao_profissional': '<span class="badge badge-purple">💼 Capacitação</span>',
-                'campanha_saude': '<span class="badge badge-success">🏥 Saúde</span>',
-                'outro': '<span class="badge badge-warning">📌 Outro</span>'
+                'campanha_saude': '<span class="badge badge-green">🏥 Saúde</span>',
+                'outro': '<span class="badge badge-yellow">📌 Outro</span>'
             };
             return tipos[tipo] || '<span class="badge">' + tipo + '</span>';
         }
 
-        function getBadgeStatus(status) {
-            const statuses = {
-                'ativo': '<span class="badge badge-success">✅ Ativo</span>',
-                'cancelado': '<span class="badge badge-danger">❌ Cancelado</span>',
-                'concluido': '<span class="badge badge-info">✔️ Concluído</span>',
-                'lotado': '<span class="badge badge-warning">🔒 Lotado</span>'
+        function badgeStatus(status) {
+            const s = {
+                'inscrito': '<span class="badge badge-blue">📝 Inscrito</span>',
+                'confirmado': '<span class="badge badge-green">✅ Confirmado</span>',
+                'lista_espera': '<span class="badge badge-yellow">⏳ Espera</span>'
             };
-            return statuses[status] || '<span class="badge">' + status + '</span>';
+            return s[status] || '<span class="badge">' + status + '</span>';
         }
 
-        function getBadgeStatusInscricao(status) {
-            const statuses = {
-                'inscrito': '<span class="badge badge-info">📝 Inscrito</span>',
-                'confirmado': '<span class="badge badge-success">✅ Confirmado</span>',
-                'cancelado': '<span class="badge badge-danger">❌ Cancelado</span>',
-                'lista_espera': '<span class="badge badge-warning">⏳ Lista Espera</span>'
-            };
-            return statuses[status] || '<span class="badge">' + status + '</span>';
-        }
-
-        function showToast(type, title, message) {
-            const container = document.getElementById('toastContainer');
-            const icons = {
-                success: '✅',
-                error: '❌',
-                info: 'ℹ️'
-            };
-
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <span class="toast-icon">${icons[type]}</span>
-                <div class="toast-content">
-                    <div class="toast-title">${title}</div>
-                    <div class="toast-message">${message}</div>
-                </div>
-                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+        function toast(type, msg) {
+            const container = document.getElementById('toasts');
+            const t = document.createElement('div');
+            t.className = 'toast ' + type;
+            t.innerHTML = `
+                <span>${type === 'success' ? '✅' : '❌'}</span>
+                <span>${msg}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
             `;
-
-            container.appendChild(toast);
-
-            // Auto-remove após 5 segundos
-            setTimeout(() => {
-                if (toast.parentElement) {
-                    toast.style.animation = 'slideIn 0.4s ease reverse';
-                    setTimeout(() => toast.remove(), 400);
-                }
-            }, 5000);
-        }
-
-        function fecharModal() {
-            document.getElementById('modalConfirm').classList.remove('active');
+            container.appendChild(t);
+            setTimeout(() => t.remove(), 4000);
         }
     </script>
 </body>
