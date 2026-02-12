@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[NOME DA EMPRESA] — Automações Inteligentes para seu Negócio</title>
+  <meta name="description" content="Automatize processos, economize tempo e escale seu negócio com soluções inteligentes de IA, WhatsApp e integrações sob medida. Feito para pequenas e médias empresas.">
+  <meta name="keywords" content="automação, inteligência artificial, WhatsApp API, N8N, agendamento, chatbot, SDR, salão de beleza, barbearia">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="[NOME DA EMPRESA] — Automações Inteligentes">
+  <meta property="og:description" content="Automatize processos, economize tempo e escale seu negócio com soluções inteligentes.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="nav-logo" aria-label="Página inicial">
+        <span class="logo-icon"><i class="fas fa-bolt"></i></span>
+        <span class="logo-text">[NOME DA EMPRESA]</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-menu" id="navMenu" role="menubar">
+        <li role="none"><a href="#solucoes" role="menuitem">Soluções</a></li>
+        <li role="none"><a href="#como-funciona" role="menuitem">Como Funciona</a></li>
+        <li role="none"><a href="#diferenciais" role="menuitem">Diferenciais</a></li>
+        <li role="none"><a href="#depoimentos" role="menuitem">Depoimentos</a></li>
+        <li role="none"><a href="#planos" role="menuitem">Planos</a></li>
+        <li role="none"><a href="#faq" role="menuitem">FAQ</a></li>
+        <li role="none"><a href="https://wa.me/5511999999999?text=Olá! Gostaria de saber mais sobre as soluções de automação." class="nav-cta" role="menuitem">Fale Conosco</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <header class="hero" id="hero">
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <div class="hero-badge anim-fade-in">
+        <i class="fas fa-robot"></i> Automação com Inteligência Artificial
+      </div>
+      <h1 class="hero-title anim-fade-in">
+        Automatize.<br>
+        <span class="gradient-text">Escale.</span><br>
+        Lucre.
+      </h1>
+      <p class="hero-subtitle anim-fade-in">
+        Criamos automações inteligentes com IA e integrações sob medida para empresas 
+        que querem crescer — sem precisar aumentar a equipe.
+      </p>
+      <div class="hero-ctas anim-fade-in">
+        <a href="https://wa.me/5511999999999?text=Olá! Gostaria de falar com um especialista." class="btn btn-primary btn-glow" id="hero-cta-whatsapp">
+          <i class="fab fa-whatsapp"></i> Fale com um especialista
+        </a>
+        <a href="#solucoes" class="btn btn-outline" id="hero-cta-solutions">
+          Veja nossas soluções <i class="fas fa-arrow-down"></i>
+        </a>
+      </div>
+      <div class="hero-stats anim-fade-in">
+        <div class="stat">
+          <span class="stat-number" data-target="500">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">Automações Entregues</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-target="15000">0</span><span class="stat-suffix">h</span>
+          <span class="stat-label">Horas Economizadas</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-target="98">0</span><span class="stat-suffix">%</span>
+          <span class="stat-label">Satisfação dos Clientes</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-indicator" aria-hidden="true">
+      <div class="scroll-line"></div>
+    </div>
+  </header>
+
+  <!-- ========== PROBLEMAS ========== -->
+  <section class="section problems" id="problemas">
+    <div class="container">
+      <div class="section-header anim-fade-up">
+        <span class="section-tag">O Problema</span>
+        <h2 class="section-title">Isso parece familiar?</h2>
+        <p class="section-subtitle">Se você se identifica com algum desses cenários, a automação inteligente é para você.</p>
+      </div>
+      <div class="problems-grid">
+        <div class="problem-card anim-fade-up" style="--delay: 0.1s">
+          <div class="problem-icon"><i class="fas fa-clock"></i></div>
+          <h3>Sua equipe perde tempo com tarefas repetitivas?</h3>
+          <p>Copiar dados, enviar mensagens manuais, preencher planilhas… Isso consome horas que poderiam gerar receita.</p>
+        </div>
+        <div class="problem-card anim-fade-up" style="--delay: 0.2s">
+          <div class="problem-icon"><i class="fas fa-hourglass-half"></i></div>
+          <h3>Clientes esperando horas por uma resposta?</h3>
+          <p>Enquanto você demora para responder, seu concorrente já fechou a venda. Cada minuto conta.</p>
+        </div>
+        <div class="problem-card anim-fade-up" style="--delay: 0.3s">
+          <div class="problem-icon"><i class="fas fa-calendar-xmark"></i></div>
+          <h3>Agenda desorganizada e clientes sumindo?</h3>
+          <p>Agendamentos por telefone, confirmações esquecidas e no-shows que custam dinheiro todo mês.</p>
+        </div>
+        <div class="problem-card anim-fade-up" style="--delay: 0.4s">
+          <div class="problem-icon"><i class="fas fa-chart-line-down"></i></div>
+          <h3>Sem controle financeiro do seu negócio?</h3>
+          <p>Não saber quanto entra, quanto sai e quanto cada profissional gera é voar no escuro.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SOLUÇÕES ========== -->
+  <section class="section solutions" id="solucoes">
+    <div class="container">
+      <div class="section-header anim-fade-up">
+        <span class="section-tag">Nossas Soluções</span>
+        <h2 class="section-title">Tecnologia que trabalha <span class="gradient-text">por você</span></h2>
+        <p class="section-subtitle">Conheça os produtos que estão transformando pequenos e médios negócios em máquinas de eficiência.</p>
+      </div>
+
+      <!-- Produto 1: SDR -->
+      <div class="solution-block anim-fade-up">
+        <div class="solution-visual">
+          <div class="solution-icon-wrapper">
+            <i class="fas fa-headset"></i>
+          </div>
+          <div class="tech-badges">
+            <span class="tech-badge">IA Conversacional</span>
+            <span class="tech-badge">N8N</span>
+            <span class="tech-badge">WhatsApp API</span>
+          </div>
+        </div>
+        <div class="solution-content">
+          <span class="solution-label">Produto 01</span>
+          <h3 class="solution-title">Agente SDR Inteligente</h3>
+          <p class="solution-desc">
+            Assistente virtual de pré-vendas que qualifica leads automaticamente via WhatsApp usando 
+            a API Oficial. Agenda reuniões, responde dúvidas e nutre leads 24/7 — sem intervenção humana.
+          </p>
+          <ul class="solution-benefits">
+            <li><i class="fas fa-check-circle"></i> Qualificação automática de leads</li>
+            <li><i class="fas fa-check-circle"></i> Agendamento inteligente direto na agenda do vendedor</li>
+            <li><i class="fas fa-check-circle"></i> Atendimento 24 horas, 7 dias por semana</li>
+            <li><i class="fas fa-check-circle"></i> Integração com CRM e ferramentas existentes</li>
+          </ul>
+          <a href="https://wa.me/5511999999999?text=Quero saber mais sobre o Agente SDR Inteligente" class="btn btn-primary" id="cta-sdr">
+            Quero um SDR que não tira férias <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Produto 2: Agendamento -->
+      <div class="solution-block reverse anim-fade-up">
+        <div class="solution-visual">
+          <div class="solution-icon-wrapper">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="tech-badges">
+            <span class="tech-badge">N8N</span>
+            <span class="tech-badge">WhatsApp API</span>
+            <span class="tech-badge">Google Calendar</span>
+          </div>
+        </div>
+        <div class="solution-content">
+          <span class="solution-label">Produto 02</span>
+          <h3 class="solution-title">Agendamento Inteligente por WhatsApp</h3>
+          <p class="solution-desc">
+            Sistema completo de agendamento automatizado integrado à API Oficial do WhatsApp. 
+            O cliente escolhe data, horário e serviço direto no chat — sem precisar ligar ou acessar outro app.
+          </p>
+          <ul class="solution-benefits">
+            <li><i class="fas fa-check-circle"></i> Zero no-show com lembretes automáticos</li>
+            <li><i class="fas fa-check-circle"></i> Confirmação e reagendamento pelo WhatsApp</li>
+            <li><i class="fas fa-check-circle"></i> Sincronização com agenda do profissional</li>
+            <li><i class="fas fa-check-circle"></i> Funciona 24h sem recepcionista</li>
+          </ul>
+          <a href="https://wa.me/5511999999999?text=Quero saber mais sobre o Agendamento Inteligente" class="btn btn-primary" id="cta-agendamento">
+            Automatizar minha agenda <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Produto 3: SaaS Salões -->
+      <div class="solution-block anim-fade-up">
+        <div class="solution-visual">
+          <div class="solution-icon-wrapper">
+            <i class="fas fa-scissors"></i>
+          </div>
+          <div class="tech-badges">
+            <span class="tech-badge">SaaS</span>
+            <span class="tech-badge">WhatsApp</span>
+            <span class="tech-badge">Gestão Completa</span>
+          </div>
+        </div>
+        <div class="solution-content">
+          <span class="solution-label">Produto 03</span>
+          <h3 class="solution-title">Sistema Completo para Salões e Barbearias</h3>
+          <p class="solution-desc">
+            Plataforma SaaS completa para gestão de salões de beleza e barbearias. Agendamento online, 
+            controle financeiro, gestão de clientes, comissionamento de profissionais e relatórios — 
+            tudo em um só lugar.
+          </p>
+          <ul class="solution-benefits">
+            <li><i class="fas fa-check-circle"></i> Agendamento online integrado ao WhatsApp</li>
+            <li><i class="fas fa-check-circle"></i> Controle de caixa e fluxo financeiro</li>
+            <li><i class="fas fa-check-circle"></i> Gestão de comissões por profissional</li>
+            <li><i class="fas fa-check-circle"></i> Histórico completo do cliente</li>
+            <li><i class="fas fa-check-circle"></i> Relatórios de faturamento e ocupação</li>
+            <li><i class="fas fa-check-circle"></i> Lembretes automáticos para clientes</li>
+          </ul>
+          <a href="https://wa.me/5511999999999?text=Quero testar o sistema para salões e barbearias" class="btn btn-primary" id="cta-saas">
+            Testar grátis por 14 dias <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== COMO FUNCIONA ========== -->
+  <section class="section how-it-works" id="como-funciona">
+    <div class="container">
+      <div class="section-header anim-fade-up">
+        <span class="section-tag">Processo</span>
+        <h2 class="section-title">Como funciona na <span class="gradient-text">prática</span></h2>
+        <p class="section-subtitle">Do primeiro contato até os resultados, nosso processo é simples e transparente.</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item anim-fade-up" style="--delay: 0.1s">
+          <div class="timeline-number">01</div>
+          <div class="timeline-content">
+            <div class="timeline-icon"><i class="fas fa-stethoscope"></i></div>
+            <h3>Diagnóstico</h3>
+            <p>Entendemos seu negócio, seus processos e identificamos os gargalos que podem ser automatizados.</p>
+          </div>
+        </div>
+        <div class="timeline-item anim-fade-up" style="--delay: 0.2s">
+          <div class="timeline-number">02</div>
+          <div class="timeline-content">
+            <div class="timeline-icon"><i class="fas fa-drafting-compass"></i></div>
+            <h3>Projeto</h3>
+            <p>Desenhamos a automação ideal, escolhendo as melhores tecnologias e integrações para o seu caso.</p>
+          </div>
+        </div>
+        <div class="timeline-item anim-fade-up" style="--delay: 0.3s">
+          <div class="timeline-number">03</div>
+          <div class="timeline-content">
+            <div class="timeline-icon"><i class="fas fa-code"></i></div>
+            <h3>Implementação</h3>
+            <p>Configuramos tudo, integramos aos seus sistemas e realizamos testes para garantir que tudo funcione perfeitamente.</p>
+          </div>
+        </div>
+        <div class="timeline-item anim-fade-up" style="--delay: 0.4s">
+          <div class="timeline-number">04</div>
+          <div class="timeline-content">
+            <div class="timeline-icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Acompanhamento</h3>
+            <p>Monitoramos os resultados, otimizamos fluxos e garantimos que você tenha o máximo retorno.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DIFERENCIAIS ========== -->
+  <section class="section differentials" id="diferenciais">
+    <div class="container">
+      <div class="section-header anim-fade-up">
+        <span class="section-tag">Por que nós?</span>
+        <h2 class="section-title">Nossos <span class="gradient-text">diferenciais</span></h2>
+      </div>
+      <div class="differentials-grid">
+        <div class="diff-card anim-fade-up" style="--delay: 0.1s">
+          <div class="diff-icon"><i class="fas fa-brain"></i></div>
+          <h3>IA de verdade</h3>
+          <p>Automações com inteligência artificial real — não apenas chatbots com menu de opções.</p>
+        </div>
+        <div class="diff-card anim-fade-up" style="--delay: 0.15s">
+          <div class="diff-icon"><i class="fab fa-whatsapp"></i></div>
+          <h3>API Oficial do WhatsApp</h3>
+          <p>Usamos a API Oficial da Meta. Sem risco de banimento, com estabilidade e confiabilidade.</p>
+        </div>
+        <div class="diff-card anim-fade-up" style="--delay: 0.2s">
+          <div class="diff-icon"><i class="fas fa-plug"></i></div>
+          <h3>Integrações sob medida</h3>
+          <p>Conectamos qualquer sistema com N8N e APIs personalizadas para o seu fluxo de trabalho.</p>
+        </div>
+        <div class="diff-card anim-fade-up" style="--delay: 0.25s">
+          <div class="diff-icon"><i class="fas fa-user-shield"></i></div>
+          <h3>Suporte humano</h3>
+          <p>Acompanhamento contínuo com uma equipe real — não somos um robô te atendendo por e-mail.</p>
+        </div>
+        <div class="diff-card anim-fade-up" style="--delay: 0.3s">
+          <div class="diff-icon"><i class="fas fa-rocket"></i></div>
+          <h3>Soluções escaláveis</h3>
+          <p>Nossas automações crescem com o seu negócio. Comece pequeno e expanda conforme precisar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DEPOIMENTOS ========== -->
+  <section class="section testimonials" id="depoimentos">
+    <div class="container">
+      <div class="section-header anim-fade-up">
+        <span class="section-tag">Prova Social</span>
+        <h2 class="section-title">Quem usa, <span class="gradient-text">recomenda</span></h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card anim-fade-up" style="--delay: 0.1s">
+          <div class="testimonial-stars" aria-label="5 estrelas">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <blockquote>
+            "Nosso agendamento era uma bagunça. Depois da automação via WhatsApp, os no-shows caíram 70% e eu não preciso mais de recepcionista o dia todo."
+          </blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">MC</div>
+            <div>
+              <strong>Mariana Costa</strong>
+              <span>Studio de Estética — SP</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card featured anim-fade-up" style="--delay: 0.2s">
+          <div class="testimonial-stars" aria-label="5 estrelas">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <blockquote>
+            "O SDR com IA qualifica meus leads antes mesmo de eu abrir o WhatsApp. Mês passado foram 47 reuniões agendadas automaticamente. Impressionante."
+          </blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">RS</div>
+            <div>
+              <strong>Rafael Santos</strong>
+              <span>Consultoria Digital — RJ</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card anim-fade-up" style="--delay: 0.3s">
+          <div class="testimonial-stars" aria-label="5 estrelas">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <blockquote>
+            "Finalmente tenho controle do meu salão. Sei quanto cada profissional fatura, o fluxo de caixa está organizado e meus clientes adoram agendar pelo WhatsApp."
+          </blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">PO</div>
+            <div>
+              <strong>Patrícia Oliveira</strong>
+              <span>Barbearia Premium — MG</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="impact-numbers anim-fade-up">
+        <div class="impact-item">
+          <span class="impact-number" data-target="12000">0</span><span class="impact-suffix">+</span>
+          <span class="impact-label">Leads qualificados</span>
+        </div>
+        <div class="impact-item">
+          <span class="impact-number" data-target="15000">0</span><span class="impact-suffix">h</span>
+          <span class="impact-label">Horas economizadas</span>
+        </div>
+        <div class="impact-item">
+          <span class="impact-number" data-target="30000">0</span><span class="impact-suffix">+</span>
+          <span class="impact-label">Agendamentos automatizados</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PLANOS ========== -->
+  <section class="section pricing" id="planos">
+    <div class="container">
+      <div class="section-header anim-fade-up">
+        <span class="section-tag">Investimento</span>
+        <h2 class="section-title">Planos que cabem <span class="gradient-text">no seu bolso</span></h2>
+        <p class="section-subtitle">Escolha o plano ideal ou solicite um orçamento personalizado para sua necessidade.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card anim-fade-up" style="--delay: 0.1s">
+          <div class="pricing-header">
+            <span class="pricing-label">Básico</span>
+            <div class="pricing-price">
+              <span class="price-currency">R$</span>
+              <span class="price-amount">497</span>
+              <span class="price-period">/mês</span>
+            </div>
+          </div>
+          <p class="pricing-desc">Ideal para quem está começando a automatizar</p>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check"></i> 1 automação principal</li>
+            <li><i class="fas fa-check"></i> Integração com WhatsApp</li>
+            <li><i class="fas fa-check"></i> Até 500 mensagens/mês</li>
+            <li><i class="fas fa-check"></i> Suporte por e-mail</li>
+            <li><i class="fas fa-check"></i> Relatório mensal básico</li>
+          </ul>
+          <a href="https://wa.me/5511999999999?text=Tenho interesse no plano Básico" class="btn btn-outline btn-full" id="cta-plan-basic">Começar agora</a>
+        </div>
+        <div class="pricing-card featured anim-fade-up" style="--delay: 0.2s">
+          <div class="pricing-badge">Mais Popular</div>
+          <div class="pricing-header">
+            <span class="pricing-label">Profissional</span>
+            <div class="pricing-price">
+              <span class="price-currency">R$</span>
+              <span class="price-amount">997</span>
+              <span class="price-period">/mês</span>
+            </div>
+          </div>
+          <p class="pricing-desc">Para negócios que querem crescer de verdade</p>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check"></i> Até 3 automações</li>
+            <li><i class="fas fa-check"></i> IA Conversacional avançada</li>
+            <li><i class="fas fa-check"></i> Mensagens ilimitadas</li>
+            <li><i class="fas fa-check"></i> Suporte prioritário via WhatsApp</li>
+            <li><i class="fas fa-check"></i> Dashboard de resultados</li>
+            <li><i class="fas fa-check"></i> Integrações com CRM</li>
+          </ul>
+          <a href="https://wa.me/5511999999999?text=Tenho interesse no plano Profissional" class="btn btn-primary btn-full" id="cta-plan-pro">Escolher Profissional</a>
+        </div>
+        <div class="pricing-card anim-fade-up" style="--delay: 0.3s">
+          <div class="pricing-header">
+            <span class="pricing-label">Enterprise</span>
+            <div class="pricing-price">
+              <span class="price-amount">Sob consulta</span>
+            </div>
+          </div>
+          <p class="pricing-desc">Soluções 100% personalizadas para operações complexas</p>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check"></i> Automações ilimitadas</li>
+            <li><i class="fas fa-check"></i> IA treinada para seu negócio</li>
+            <li><i class="fas fa-check"></i> Integrações sob medida</li>
+            <li><i class="fas fa-check"></i> Gerente de conta dedicado</li>
+            <li><i class="fas fa-check"></i> SLA de suporte garantido</li>
+            <li><i class="fas fa-check"></i> Consultoria estratégica mensal</li>
+          </ul>
+          <a href="https://wa.me/5511999999999?text=Tenho interesse no plano Enterprise" class="btn btn-outline btn-full" id="cta-plan-enterprise">Solicitar orçamento</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FAQ ========== -->
+  <section class="section faq" id="faq">
+    <div class="container">
+      <div class="section-header anim-fade-up">
+        <span class="section-tag">Dúvidas</span>
+        <h2 class="section-title">Perguntas <span class="gradient-text">Frequentes</span></h2>
+      </div>
+      <div class="faq-list anim-fade-up">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" id="faq-btn-1">
+            <span>Preciso da API Oficial do WhatsApp?</span>
+            <i class="fas fa-plus faq-icon"></i>
+          </button>
+          <div class="faq-answer" role="region" aria-labelledby="faq-btn-1">
+            <p>Sim, para garantir a estabilidade e segurança das automações, utilizamos exclusivamente a API Oficial do WhatsApp (Meta Business). Isso elimina qualquer risco de banimento e garante entregabilidade das mensagens. Nós cuidamos de todo o processo de configuração para você.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" id="faq-btn-2">
+            <span>Quanto tempo leva para implementar?</span>
+            <i class="fas fa-plus faq-icon"></i>
+          </button>
+          <div class="faq-answer" role="region" aria-labelledby="faq-btn-2">
+            <p>Depende da complexidade, mas a maioria das automações fica pronta entre 5 a 15 dias úteis. Projetos mais simples, como agendamento automatizado, podem estar rodando em menos de uma semana. Fazemos tudo para entregar rápido sem comprometer a qualidade.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" id="faq-btn-3">
+            <span>Funciona para qualquer tipo de negócio?</span>
+            <i class="fas fa-plus faq-icon"></i>
+          </button>
+          <div class="faq-answer" role="region" aria-labelledby="faq-btn-3">
+            <p>Nossas soluções são especialmente eficazes para prestadores de serviço, clínicas, salões, consultorias, imobiliárias, e-commerces e negócios B2B. Se o seu negócio envolve atendimento ao cliente, agendamentos ou vendas, com certeza podemos ajudar.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" id="faq-btn-4">
+            <span>Vocês oferecem suporte após a implementação?</span>
+            <i class="fas fa-plus faq-icon"></i>
+          </button>
+          <div class="faq-answer" role="region" aria-labelledby="faq-btn-4">
+            <p>Com certeza! Todos os nossos planos incluem suporte contínuo. Monitoramos as automações, realizamos otimizações e estamos sempre disponíveis para ajustes. Você nunca fica sozinho.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" id="faq-btn-5">
+            <span>O que acontece se eu quiser cancelar?</span>
+            <i class="fas fa-plus faq-icon"></i>
+          </button>
+          <div class="faq-answer" role="region" aria-labelledby="faq-btn-5">
+            <p>Não temos fidelidade. Você pode cancelar a qualquer momento sem multa. Acreditamos que você vai ficar porque os resultados falam por si — não porque está preso a um contrato.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA FINAL ========== -->
+  <section class="section final-cta">
+    <div class="container">
+      <div class="final-cta-content anim-fade-up">
+        <h2>Pronto para colocar seu negócio no <span class="gradient-text">piloto automático</span>?</h2>
+        <p>Converse com um dos nossos especialistas e descubra como podemos transformar a operação do seu negócio.</p>
+        <a href="https://wa.me/5511999999999?text=Olá! Quero saber como automatizar meu negócio." class="btn btn-primary btn-lg btn-glow" id="cta-final">
+          <i class="fab fa-whatsapp"></i> Falar com especialista agora
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo" aria-label="Página inicial">
+            <span class="logo-icon"><i class="fas fa-bolt"></i></span>
+            <span class="logo-text">[NOME DA EMPRESA]</span>
+          </a>
+          <p>Automações inteligentes com IA e integrações sob medida para pequenos e médios negócios que querem crescer.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://wa.me/5511999999999" aria-label="WhatsApp" class="social-link"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="#solucoes">Soluções</a></li>
+            <li><a href="#como-funciona">Como Funciona</a></li>
+            <li><a href="#diferenciais">Diferenciais</a></li>
+            <li><a href="#depoimentos">Depoimentos</a></li>
+            <li><a href="#planos">Planos</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Soluções</h4>
+          <ul>
+            <li><a href="#solucoes">Agente SDR com IA</a></li>
+            <li><a href="#solucoes">Agendamento Inteligente</a></li>
+            <li><a href="#solucoes">Sistema para Salões</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="https://wa.me/5511999999999"><i class="fab fa-whatsapp"></i> (11) 99999-9999</a></li>
+            <li><a href="mailto:contato@empresa.com.br"><i class="fas fa-envelope"></i> contato@empresa.com.br</a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i> @nomeDaEmpresa</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 [NOME DA EMPRESA] — Todos os direitos reservados</p>
+        <p class="footer-cnpj">CNPJ: 00.000.000/0001-00</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== WHATSAPP FLOAT ========== -->
+  <a href="https://wa.me/5511999999999?text=Olá! Gostaria de saber mais sobre as soluções de automação." 
+     class="whatsapp-float" 
+     id="whatsapp-float"
+     aria-label="Falar pelo WhatsApp"
+     target="_blank"
+     rel="noopener noreferrer">
+    <i class="fab fa-whatsapp"></i>
+    <span class="whatsapp-tooltip">Fale conosco!</span>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
